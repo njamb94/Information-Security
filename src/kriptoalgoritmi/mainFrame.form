@@ -52,7 +52,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Encription"/>
+            <TitledBorder title="Encryption"/>
           </Border>
         </Property>
         <Property name="name" type="java.lang.String" value="" noResource="true"/>
@@ -68,31 +68,28 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="encProgressBar" alignment="0" pref="437" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="encDstDir" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="encDstBtn" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="encSrcDir" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="encSrcBtn" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="encProgressBar" alignment="0" pref="437" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="encBtn" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="encCheckBox" min="-2" pref="189" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="encDstDir" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="encDstBtn" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="encSrcDir" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="encSrcBtn" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="encProgressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="encProgressLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -134,7 +131,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Source directory for encription:"/>
+            <Property name="text" type="java.lang.String" value="Source directory for encryption:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="encSrcDir">
@@ -150,7 +147,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Destination directory for encripted files:"/>
+            <Property name="text" type="java.lang.String" value="Destination directory for encrypted files:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="encDstDir">
@@ -165,12 +162,15 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="encCheckBox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Turn On/Off automatic encription."/>
+            <Property name="text" type="java.lang.String" value="Turn On/Off automatic encryption."/>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="encCheckBoxStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="encBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Encript"/>
+            <Property name="text" type="java.lang.String" value="Encrypt"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JProgressBar" name="encProgressBar">
@@ -186,7 +186,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Decription"/>
+            <TitledBorder title="Decryption"/>
           </Border>
         </Property>
       </Properties>
@@ -254,7 +254,7 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Source directory for decription:"/>
+            <Property name="text" type="java.lang.String" value="Source directory for decryption:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="decSrcDir">
@@ -284,7 +284,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="decBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Decript"/>
+            <Property name="text" type="java.lang.String" value="Decrypt"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JProgressBar" name="decProgressBar">
@@ -292,7 +292,7 @@
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="* Default directory is destination directory for encripted files"/>
+            <Property name="text" type="java.lang.String" value="* Default directory is destination directory for encrypted files"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="decProgressLabel">

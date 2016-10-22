@@ -6,15 +6,43 @@
 
 package kriptoalgoritmi;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Njamb
  */
-public class mainFrame extends javax.swing.JFrame {
-
+public class mainFrame extends javax.swing.JFrame implements ActionListener {
+    
+    private JFileChooser fileChooser;
+    
     /** Creates new form mainFrame */
     public mainFrame() {
+        // Setting location for main form to be displayed at:
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/4, dim.height/4);
         initComponents();
+        
+        // Setting button listeners:
+        encSrcBtn.addActionListener(this);
+        encDstBtn.addActionListener(this);
+        decSrcBtn.addActionListener(this);
+        decDstBtn.addActionListener(this);
+        encBtn.addActionListener(this);
+        decBtn.addActionListener(this);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(WindowEvent winEvt) {
+                // TO-DO:
+                // Add window closing handler
+            }
+        });
     }
 
     /** This method is called from within the constructor to
@@ -53,25 +81,30 @@ public class mainFrame extends javax.swing.JFrame {
         setTitle("Njamb's Cryptography");
         setResizable(false);
 
-        encriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Encription"));
+        encriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Encryption"));
         encriptionPanel.setName(""); // NOI18N
 
-        jLabel1.setText("Source directory for encription:");
+        jLabel1.setText("Source directory for encryption:");
 
         encSrcDir.setEditable(false);
         encSrcDir.setToolTipText("");
 
         encSrcBtn.setText("Choose");
 
-        jLabel2.setText("Destination directory for encripted files:");
+        jLabel2.setText("Destination directory for encrypted files:");
 
         encDstDir.setEditable(false);
 
         encDstBtn.setText("Choose");
 
-        encCheckBox.setText("Turn On/Off automatic encription.");
+        encCheckBox.setText("Turn On/Off automatic encryption.");
+        encCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                encCheckBoxStateChanged(evt);
+            }
+        });
 
-        encBtn.setText("Encript");
+        encBtn.setText("Encrypt");
 
         encProgressLabel.setText("Progress:");
 
@@ -82,26 +115,24 @@ public class mainFrame extends javax.swing.JFrame {
             .addGroup(encriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, encriptionPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(encProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                    .addGroup(encriptionPanelLayout.createSequentialGroup()
+                        .addComponent(encDstDir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(encDstBtn))
+                    .addGroup(encriptionPanelLayout.createSequentialGroup()
+                        .addComponent(encSrcDir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(encSrcBtn))
+                    .addGroup(encriptionPanelLayout.createSequentialGroup()
                         .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(encProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                             .addGroup(encriptionPanelLayout.createSequentialGroup()
                                 .addComponent(encBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(encCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(encriptionPanelLayout.createSequentialGroup()
-                                .addComponent(encDstDir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(encDstBtn))
-                            .addGroup(encriptionPanelLayout.createSequentialGroup()
-                                .addComponent(encSrcDir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(encSrcBtn))))
-                    .addGroup(encriptionPanelLayout.createSequentialGroup()
-                        .addComponent(encProgressLabel)
+                            .addComponent(encProgressLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -131,9 +162,9 @@ public class mainFrame extends javax.swing.JFrame {
                 .addGap(6, 6, 6))
         );
 
-        decriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Decription"));
+        decriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Decryption"));
 
-        jLabel3.setText("Source directory for decription:");
+        jLabel3.setText("Source directory for decryption:");
 
         decSrcDir.setEditable(false);
 
@@ -145,10 +176,10 @@ public class mainFrame extends javax.swing.JFrame {
 
         decDstBtn.setText("Choose");
 
-        decBtn.setText("Decript");
+        decBtn.setText("Decrypt");
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setText("* Default directory is destination directory for encripted files");
+        jLabel5.setText("* Default directory is destination directory for encrypted files");
 
         decProgressLabel.setText("Progress:");
 
@@ -229,18 +260,25 @@ public class mainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void encCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_encCheckBoxStateChanged
+        if (encCheckBox.isSelected())
+            encBtn.setEnabled(false);
+        else
+            encBtn.setEnabled(true);
+    }//GEN-LAST:event_encCheckBoxStateChanged
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        /* Set the Windows look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -288,5 +326,72 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO add your handling code here:
+        Object sender = e.getSource();
+        
+        if (sender == encBtn || sender == decBtn) {
+            // 'Encript' button
+            if (sender == encBtn) {
+                if (!encSrcDir.getText().isEmpty() && 
+                        !encDstDir.getText().isEmpty()) {
+
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Please choose "
+                            + "encription source & destination folders before "
+                            + "retrying to encript files.",
+                            "Folders not specified", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            // 'Decript' button
+            else {
+                if (!decSrcDir.getText().isEmpty() && 
+                        !decDstDir.getText().isEmpty()) {
+                    
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Please choose "
+                            + "decription source & destination folders before "
+                            + "retrying to encript files.",
+                            "Folders not specified",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            }
+        else {
+            fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Choose directory");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+
+            if (fileChooser.showOpenDialog(null) == 
+                    JFileChooser.APPROVE_OPTION) {
+                String path = fileChooser.getSelectedFile().toString();
+                // Encription source directory button
+                if (sender == encSrcBtn) {
+                    encSrcDir.setText(path);
+                }
+                // Encription destination directory button
+                else if (sender == encDstBtn) {
+                    encDstDir.setText(path);
+                    if (decSrcDir.getText().isEmpty())
+                        decSrcDir.setText(path);
+                }
+                // Decription source directory button
+                else if (sender == decSrcBtn) {
+                    decSrcDir.setText(path);
+                }
+                // Decription destination directory button
+                else if (sender == decDstBtn) {
+                    decDstDir.setText(path);
+                }
+
+            }
+        }
+    }
 
 }
