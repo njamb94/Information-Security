@@ -60,12 +60,14 @@ public class encryptionThread implements Runnable{
         try {
             FileWriter fileWriter;
             if (isEncryption) {
-                filesInFolder[index] = filesInFolder[index].replace(".txt", ".nj");
+                filesInFolder[index] = filesInFolder[index].replace(".txt", 
+                        ".nj");
                 fileWriter = new FileWriter(encDstFolder + "\\" + 
                     filesInFolder[index]);
             }
             else {
-                filesInFolder[index] = filesInFolder[index].replace(".nj", ".txt");
+                filesInFolder[index] = filesInFolder[index].replace(".nj", 
+                        ".txt");
                 fileWriter = new FileWriter(decDstFolder + "\\" + 
                     filesInFolder[index]);
             }
@@ -81,7 +83,8 @@ public class encryptionThread implements Runnable{
             fileWriter.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, 
+                    null, ex);
         }
     } 
 }

@@ -125,8 +125,10 @@ public class directoryClass {
             
             int numberOfLines = 0;
             try {
-                FileReader fileReader = new FileReader(encSrcTextField + "\\" + filesInFolder[k]);
-                FileReader fr = new FileReader(encSrcTextField + "\\" + filesInFolder[k]);
+                FileReader fileReader = new FileReader(encSrcTextField + "\\" + 
+                        filesInFolder[k]);
+                FileReader fr = new FileReader(encSrcTextField + "\\" + 
+                        filesInFolder[k]);
 
                 BufferedReader buffReader = new BufferedReader(fileReader);
 
@@ -162,8 +164,10 @@ public class directoryClass {
         
             int numberOfLines = 0;
             try {
-                FileReader fileReader = new FileReader(decSrcTextField + "\\" + filesInFolder[k]);
-                FileReader fr = new FileReader(decSrcTextField + "\\" + filesInFolder[k]);
+                FileReader fileReader = new FileReader(decSrcTextField + "\\" + 
+                        filesInFolder[k]);
+                FileReader fr = new FileReader(decSrcTextField + "\\" + 
+                        filesInFolder[k]);
 
                 BufferedReader buffReader = new BufferedReader(fileReader);
 
@@ -188,7 +192,8 @@ public class directoryClass {
 //                try {
 //                    sleep(5000);
 //            } catch (InterruptedException ex) {
-//                Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(directoryClass.class.getName()).
+//                        log(Level.SEVERE, null, ex);
 //            }
 
             myThread = new encryptionThread(this, k, false);

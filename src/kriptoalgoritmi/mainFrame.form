@@ -68,7 +68,6 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="encProgressBar" alignment="0" pref="437" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="encDstDir" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -88,9 +87,8 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="encCheckBox" min="-2" pref="189" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="encProgressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="169" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -120,10 +118,6 @@
                       <Component id="encCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="encProgressBar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="encProgressLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -173,13 +167,6 @@
             <Property name="text" type="java.lang.String" value="Encrypt"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JProgressBar" name="encProgressBar">
-        </Component>
-        <Component class="javax.swing.JLabel" name="encProgressLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Progress:"/>
-          </Properties>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="decriptionPanel">
@@ -196,24 +183,20 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="decProgressBar" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="decBtn" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="decProgressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="decDstDir" pref="362" max="32767" attributes="0"/>
-                                  <Component id="decSrcDir" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="decSrcBtn" min="-2" max="-2" attributes="0"/>
-                                  <Component id="decDstBtn" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="decBtn" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="decDstDir" pref="362" max="32767" attributes="0"/>
+                              <Component id="decSrcDir" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="decSrcBtn" min="-2" max="-2" attributes="0"/>
+                              <Component id="decDstBtn" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -242,11 +225,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="decBtn" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="decProgressBar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="decProgressLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -287,17 +266,10 @@
             <Property name="text" type="java.lang.String" value="Decrypt"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JProgressBar" name="decProgressBar">
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="text" type="java.lang.String" value="* Default directory is destination directory for encrypted files"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="decProgressLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Progress:"/>
           </Properties>
         </Component>
       </SubComponents>
