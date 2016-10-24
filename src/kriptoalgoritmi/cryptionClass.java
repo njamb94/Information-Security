@@ -12,9 +12,27 @@ package kriptoalgoritmi;
 public class cryptionClass {
     private String[] words;
     private int numberOfWords;
+    private String[] sentences;
     
-    public cryptionClass(String text) {
-        separateWords(text);
+    public cryptionClass(String[] text) {
+        sentences = text;
+    }
+    
+    // Interface for encryption:
+    public String[] encrypt() {
+        String tmp = new String();
+        for (int i = 0; i < sentences.length; i++) {
+            separatedWords(sentences[i]);
+            encryptText();
+            
+            for (int k = 0; k < numberOfWords; k++) {
+                tmp += words[k] + " ";
+            }
+            
+            // Encrypted sentence returned to it's place:
+            sentences[i] = tmp;
+        }
+        return sentences;
     }
     
     // Method that returns String array of the working text:
@@ -27,7 +45,7 @@ public class cryptionClass {
     }
     
     // Method for concatinating 2 word - words: (e.g. "Los Santos")
-    private void separateWords(String text) {
+    private void separatedWords(String text) {
         words = text.trim().split("\\s+");
         int currentNumber = words.length;
         
@@ -64,7 +82,7 @@ public class cryptionClass {
     }
     
     // Encryption method:
-    public void encryptText() {
+    private void encryptText() {
         String tmp;
         int code = 0;
         
@@ -124,7 +142,7 @@ public class cryptionClass {
     }
     
     // Decryption method:
-    public void decryptText() {
+    private void decryptText() {
         String tmp;
         int code = 0;
         
