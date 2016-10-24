@@ -18,23 +18,6 @@ public class cryptionClass {
         sentences = text;
     }
     
-    // Interface for encryption:
-    public String[] encrypt() {
-        String tmp = new String();
-        for (int i = 0; i < sentences.length; i++) {
-            separatedWords(sentences[i]);
-            encryptText();
-            
-            for (int k = 0; k < numberOfWords; k++) {
-                tmp += words[k] + " ";
-            }
-            
-            // Encrypted sentence returned to it's place:
-            sentences[i] = tmp;
-        }
-        return sentences;
-    }
-    
     // Method that returns String array of the working text:
     private String[] getWordsFromText(String[] textInArray) {
         String[] newStr = new String[numberOfWords];
@@ -46,7 +29,7 @@ public class cryptionClass {
     
     // Method for concatinating 2 word - words: (e.g. "Los Santos")
     private void separatedWords(String text) {
-        words = text.trim().split("\\s+");
+        words = text.split("\\s+");
         int currentNumber = words.length;
         
         for (int i = 0; i < currentNumber; i++) {
@@ -209,5 +192,41 @@ public class cryptionClass {
         }
         
         System.out.print(str);
+    }
+
+    // Interface for encryption:
+    public String[] encrypt() {
+        String tmp;
+        for (int i = 0; i < sentences.length; i++) {
+            separatedWords(sentences[i]);
+            encryptText();
+            
+            tmp = new String();
+            for (int k = 0; k < numberOfWords; k++) {
+                tmp += words[k] + " ";
+            }
+            
+            // Encrypted sentence returned to it's place:
+            sentences[i] = tmp;
+        }
+        return sentences;
+    }
+    
+    // Interface for decryption:
+    public String[] decrypt() {
+        String tmp;
+        for (int i = 0; i < sentences.length; i++) {
+            separatedWords(sentences[i]);
+            decryptText();
+
+            tmp = new String();
+            for (int k = 0; k < numberOfWords; k++) {
+                tmp += words[k] + " ";
+            }
+
+            // Decrypted sentence returned to it's place:
+            sentences[i] = tmp;
+        }
+        return sentences;    
     }
 }

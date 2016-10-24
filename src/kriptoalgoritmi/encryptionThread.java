@@ -15,46 +15,67 @@ import java.util.logging.Logger;
  *
  * @author Njamb
  */
-public class encryptionThread {
+public class encryptionThread implements Runnable{
     
     private String[] content;
     private String[] filesInFolder;
     private String encDstFolder;
+    private String decDstFolder;
     private int numberOfLines;
     private int index;
+    private boolean isEncryption;
 
     // Thread constructor that saves all necessary information:
-    // Sentences in array to be encrypted (text)
-    // Names of the .txt files to be encrypted (files)
-    // Destination folder for encrypted files (dst)
+    // Sentences in array to be encrypted/decrypted (text)
+    // Names of the .txt files to be encrypted/decrypted (files)
+    // Destination folder for encrypted/decrypted files (dst)
     // Number of lines to be written (lines)
-    // Index of the .txt file being encrypted (i)
-    public encryptionThread(String[] text, String[] files, String dst, 
-            int lines, int i) {
-        content = text;
-        filesInFolder = files;
-        encDstFolder = dst;
-        numberOfLines = lines;
+    // Index of the .txt/.nj file being encrypted/decrypted (i)
+    public encryptionThread(directoryClass dir, int i, boolean bool) {
+        
+        content = new String[dir.getContent().length];
+        for (int k = 0; k < content.length; k++)
+            content[k] = dir.getContent()[k];
+        
+        filesInFolder = dir.getFilesInFolder();
+        encDstFolder = dir.getEncDst();
+        decDstFolder = dir.getDecDst();
+        numberOfLines = dir.getNumberOfLines();
         index = i;
+        isEncryption = bool;
     }
     
    // Code for thread's execution
     public void run() {
         // Text encryption:
         cryptionClass cryptObj = new cryptionClass(content);
-        String[] encryptedText = cryptObj.encrypt();
-
+        String[] text;
+        if (isEncryption)
+            text = cryptObj.encrypt();
+        else
+            text = cryptObj.decrypt();
+        
         //////////////////////////////
-        // TO-DO: Save encryptedText to file:            
+        // TO-DO: Save encryptedText/decryptedText to file:            
         try {
-            filesInFolder[index] = filesInFolder[index].replace(".txt", ".nj");
-            FileWriter fileWriter = new FileWriter(encDstFolder + "\\" + 
+            FileWriter fileWriter;
+            if (isEncryption) {
+                filesInFolder[index] = filesInFolder[index].replace(".txt", ".nj");
+                fileWriter = new FileWriter(encDstFolder + "\\" + 
                     filesInFolder[index]);
+            }
+            else {
+                filesInFolder[index] = filesInFolder[index].replace(".nj", ".txt");
+                fileWriter = new FileWriter(decDstFolder + "\\" + 
+                    filesInFolder[index]);
+            }
             BufferedWriter buffWriter = new BufferedWriter(fileWriter);
 
-            for (int i = 0; i < numberOfLines; i++) {
-                buffWriter.write(content[i] + "\n");
+            for (int i = 0; i < numberOfLines - 1; i++) {
+                buffWriter.write(text[i]);
+                buffWriter.newLine();
             }
+            buffWriter.write(text[numberOfLines - 1]);
 
             buffWriter.close();
             fileWriter.close();

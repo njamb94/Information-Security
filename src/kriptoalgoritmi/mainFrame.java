@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 public class mainFrame extends javax.swing.JFrame implements ActionListener {
     
     private JFileChooser fileChooser;
+    private directoryClass dir = directoryClass.getInstance();
     
     /** Creates new form mainFrame */
     public mainFrame() {
@@ -43,6 +44,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                 // Add window closing handler
             }
         });
+        
+        checkButtons();        
+        dir.setListener(this);
     }
 
     /** This method is called from within the constructor to
@@ -264,9 +268,31 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         if (encCheckBox.isSelected())
             encBtn.setEnabled(false);
         else
-            encBtn.setEnabled(true);
+            if (encCheckBox.isEnabled())
+                encBtn.setEnabled(true);
     }//GEN-LAST:event_encCheckBoxStateChanged
 
+    private void checkButtons() {
+        // Disable 'Encrypt' button and automatic encryption checkbox if source 
+        // & destination folders aren't chosen.
+        if (encSrcDir.getText().equals("") || encDstDir.getText().equals("")) {
+            encBtn.setEnabled(false);
+            encCheckBox.setEnabled(false);
+        }
+        else {
+            encBtn.setEnabled(true);
+            encCheckBox.setEnabled(true);
+        }
+        
+        // Disable 'Decrypt' button if source & destination folders aren't
+        // chosen. 
+        if (decSrcDir.getText().equals("") || decDstDir.getText().equals("")) {
+            decBtn.setEnabled(false);
+        }
+        else
+            decBtn.setEnabled(true);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -327,9 +353,13 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 
+    public void setEncProgressLabel(int current, int last) {
+        encProgressLabel.setText("Progress: " + Integer.toString(current) + 
+                "/" + Integer.toString(last) + " files encrypted...");
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO add your handling code here:
         Object sender = e.getSource();
         
         if (sender == encBtn || sender == decBtn) {
@@ -337,7 +367,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             if (sender == encBtn) {
                 if (!encSrcDir.getText().isEmpty() && 
                         !encDstDir.getText().isEmpty()) {
-
+                    dir.readDirectory(dir.getEncSrc(), true);
+                    dir.encryptFiles();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Please choose "
@@ -351,7 +382,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             else {
                 if (!decSrcDir.getText().isEmpty() && 
                         !decDstDir.getText().isEmpty()) {
-                    
+                    dir.readDirectory(dir.getDecSrc(), false);
+                    dir.decryptFiles();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Please choose "
@@ -374,24 +406,29 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                 // Encription source directory button
                 if (sender == encSrcBtn) {
                     encSrcDir.setText(path);
+                    dir.setEncSrc(path);
                 }
                 // Encription destination directory button
                 else if (sender == encDstBtn) {
                     encDstDir.setText(path);
-                    if (decSrcDir.getText().isEmpty())
+                    dir.setEncDst(path);
+                    if (decSrcDir.getText().isEmpty()) {
                         decSrcDir.setText(path);
+                        dir.setDecSrc(path);
+                    }
                 }
                 // Decription source directory button
                 else if (sender == decSrcBtn) {
                     decSrcDir.setText(path);
+                    dir.setDecSrc(path);
                 }
                 // Decription destination directory button
                 else if (sender == decDstBtn) {
                     decDstDir.setText(path);
+                    dir.setDecDst(path);
                 }
-
             }
+            checkButtons();
         }
     }
-
 }
