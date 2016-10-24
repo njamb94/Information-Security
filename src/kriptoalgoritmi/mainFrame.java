@@ -67,6 +67,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         encDstBtn = new javax.swing.JButton();
         encCheckBox = new javax.swing.JCheckBox();
         encBtn = new javax.swing.JButton();
+        encProgressBar = new javax.swing.JProgressBar();
+        encProgressLabel = new javax.swing.JLabel();
         decriptionPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         decSrcDir = new javax.swing.JTextField();
@@ -75,7 +77,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         decDstDir = new javax.swing.JTextField();
         decDstBtn = new javax.swing.JButton();
         decBtn = new javax.swing.JButton();
+        decProgressBar = new javax.swing.JProgressBar();
         jLabel5 = new javax.swing.JLabel();
+        decProgressLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Njamb's Cryptography");
@@ -106,6 +110,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
 
         encBtn.setText("Encrypt");
 
+        encProgressLabel.setText("Progress:");
+
         javax.swing.GroupLayout encriptionPanelLayout = new javax.swing.GroupLayout(encriptionPanel);
         encriptionPanel.setLayout(encriptionPanelLayout);
         encriptionPanelLayout.setHorizontalGroup(
@@ -113,6 +119,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             .addGroup(encriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(encProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                     .addGroup(encriptionPanelLayout.createSequentialGroup()
                         .addComponent(encDstDir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -128,8 +135,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                             .addGroup(encriptionPanelLayout.createSequentialGroup()
                                 .addComponent(encBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(encCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 169, Short.MAX_VALUE)))
+                                .addComponent(encCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(encProgressLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         encriptionPanelLayout.setVerticalGroup(
@@ -151,7 +159,11 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                 .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(encBtn)
                     .addComponent(encCheckBox))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(encProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(encProgressLabel)
+                .addGap(6, 6, 6))
         );
 
         decriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Decryption"));
@@ -173,25 +185,30 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel5.setText("* Default directory is destination directory for encrypted files");
 
+        decProgressLabel.setText("Progress:");
+
         javax.swing.GroupLayout decriptionPanelLayout = new javax.swing.GroupLayout(decriptionPanel);
         decriptionPanel.setLayout(decriptionPanelLayout);
         decriptionPanelLayout.setHorizontalGroup(
             decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(decriptionPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(decBtn)
-                    .addGroup(decriptionPanelLayout.createSequentialGroup()
-                        .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(decDstDir, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
-                            .addComponent(decSrcDir))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(decSrcBtn)
-                            .addComponent(decDstBtn))))
+                .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(decProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel4)
+                        .addComponent(decBtn)
+                        .addComponent(decProgressLabel)
+                        .addGroup(decriptionPanelLayout.createSequentialGroup()
+                            .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(decDstDir, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                .addComponent(decSrcDir))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(decSrcBtn)
+                                .addComponent(decDstBtn)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         decriptionPanelLayout.setVerticalGroup(
@@ -213,7 +230,11 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(decDstBtn))
                 .addGap(18, 18, 18)
                 .addComponent(decBtn)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(decProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(decProgressLabel)
+                .addGap(6, 6, 6))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -311,6 +332,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JButton decBtn;
     private javax.swing.JButton decDstBtn;
     private javax.swing.JTextField decDstDir;
+    private javax.swing.JProgressBar decProgressBar;
+    private javax.swing.JLabel decProgressLabel;
     private javax.swing.JButton decSrcBtn;
     private javax.swing.JTextField decSrcDir;
     private javax.swing.JPanel decriptionPanel;
@@ -318,6 +341,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JCheckBox encCheckBox;
     private javax.swing.JButton encDstBtn;
     private javax.swing.JTextField encDstDir;
+    private javax.swing.JProgressBar encProgressBar;
+    private javax.swing.JLabel encProgressLabel;
     private javax.swing.JButton encSrcBtn;
     private javax.swing.JTextField encSrcDir;
     private javax.swing.JPanel encriptionPanel;
@@ -327,6 +352,11 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
+
+    public void setEncProgressLabel(int current, int last) {
+        encProgressLabel.setText("Progress: " + Integer.toString(current) + 
+                "/" + Integer.toString(last) + " files encrypted...");
+    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
