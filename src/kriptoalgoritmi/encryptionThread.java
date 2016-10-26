@@ -5,7 +5,9 @@
  */
 package kriptoalgoritmi;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -17,11 +19,12 @@ import java.util.logging.Logger;
  */
 public class encryptionThread implements Runnable{
     
-    private String[] content;
     private String[] filesInFolder;
+    private String encSrcFolder;
     private String encDstFolder;
+    private String decSrcFolder;
     private String decDstFolder;
-    private int numberOfLines;
+    
     private int index;
     private boolean isEncryption;
 
@@ -32,15 +35,13 @@ public class encryptionThread implements Runnable{
     // Number of lines to be written (lines)
     // Index of the .txt/.nj file being encrypted/decrypted (i)
     public encryptionThread(directoryClass dir, int i, boolean bool) {
-        
-        content = new String[dir.getContent().length];
-        for (int k = 0; k < content.length; k++)
-            content[k] = dir.getContent()[k];
-        
+       
         filesInFolder = dir.getFilesInFolder();
+        encSrcFolder = dir.getEncSrc();
         encDstFolder = dir.getEncDst();
+        decSrcFolder = dir.getDecSrc();
         decDstFolder = dir.getDecDst();
-        numberOfLines = dir.getNumberOfLines();
+        
         index = i;
         isEncryption = bool;
     }
@@ -48,43 +49,62 @@ public class encryptionThread implements Runnable{
    // Code for thread's execution
     public void run() {
         // Text encryption:
-        cryptionClass cryptObj = new cryptionClass(content);
-        String[] text;
-        if (isEncryption)
-            text = cryptObj.encrypt();
-        else
-            text = cryptObj.decrypt();
-        
-        //////////////////////////////
-        // TO-DO: Save encryptedText/decryptedText to file:            
+        cryptionClass cryptObj = new cryptionClass();
+                    
         try {
+            FileReader fileReader;
+            BufferedReader buffReader;
             FileWriter fileWriter;
             if (isEncryption) {
+                fileReader = new FileReader(encSrcFolder + "\\" + 
+                            filesInFolder[index]);
+                buffReader = new BufferedReader(fileReader);
+                
                 filesInFolder[index] = filesInFolder[index].replace(".txt", 
                         ".nj");
                 fileWriter = new FileWriter(encDstFolder + "\\" + 
                     filesInFolder[index]);
             }
             else {
-                filesInFolder[index] = filesInFolder[index].replace(".nj", 
+                fileReader = new FileReader(decSrcFolder + "\\" + 
+                            filesInFolder[index]);
+                buffReader = new BufferedReader(fileReader);
+                
+                 filesInFolder[index] = filesInFolder[index].replace(".nj", 
                         ".txt");
                 fileWriter = new FileWriter(decDstFolder + "\\" + 
                     filesInFolder[index]);
             }
             BufferedWriter buffWriter = new BufferedWriter(fileWriter);
-
-            for (int i = 0; i < numberOfLines - 1; i++) {
-                buffWriter.write(text[i]);
+            
+            if (filesInFolder[index].contains("SWE")) {
+                int p;
+            }
+            
+            String line;
+            while ((line = buffReader.readLine()) != null) {
+                if (isEncryption){
+                    line = cryptObj.encrypt(line);
+                }
+                else {
+                    line = cryptObj.decrypt(line);
+                }
+                
+                buffWriter.write(line);
                 buffWriter.newLine();
             }
-            buffWriter.write(text[numberOfLines - 1]);
-
+            buffReader.close();
+            fileReader.close();
             buffWriter.close();
             fileWriter.close();
-
         } catch (IOException ex) {
             Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, 
                     null, ex);
         }
+        
+        if (index % 2 == 0)
+            synchronized (directoryClass.getInstance()) {
+                directoryClass.getInstance().notify();
+            }
     } 
 }

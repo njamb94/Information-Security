@@ -12,10 +12,8 @@ package kriptoalgoritmi;
 public class cryptionClass {
     private String[] words;
     private int numberOfWords;
-    private String[] sentences;
     
-    public cryptionClass(String[] text) {
-        sentences = text;
+    public cryptionClass() {
     }
     
     // Method that returns String array of the working text:
@@ -195,38 +193,30 @@ public class cryptionClass {
     }
 
     // Interface for encryption:
-    public String[] encrypt() {
+    public String encrypt(String txt) {
         String tmp;
-        for (int i = 0; i < sentences.length; i++) {
-            separatedWords(sentences[i]);
-            encryptText();
-            
-            tmp = new String();
-            for (int k = 0; k < numberOfWords; k++) {
-                tmp += words[k] + " ";
-            }
-            
-            // Encrypted sentence returned to it's place:
-            sentences[i] = tmp;
+        separatedWords(txt);
+        encryptText();
+        tmp = new String();
+        
+        for (int k = 0; k < numberOfWords; k++) {
+            tmp += words[k] + " ";
         }
-        return sentences;
+        
+        return tmp;
     }
     
     // Interface for decryption:
-    public String[] decrypt() {
+    public String decrypt(String txt) {
         String tmp;
-        for (int i = 0; i < sentences.length; i++) {
-            separatedWords(sentences[i]);
-            decryptText();
-
-            tmp = new String();
-            for (int k = 0; k < numberOfWords; k++) {
-                tmp += words[k] + " ";
-            }
-
-            // Decrypted sentence returned to it's place:
-            sentences[i] = tmp;
+        separatedWords(txt);
+        decryptText();
+        tmp = new String();
+        
+        for (int k = 0; k < numberOfWords; k++) {
+            tmp += words[k] + " ";
         }
-        return sentences;    
+        
+        return tmp;   
     }
 }

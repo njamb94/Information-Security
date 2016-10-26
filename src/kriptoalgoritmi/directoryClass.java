@@ -12,6 +12,7 @@ import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +37,6 @@ public class directoryClass {
     private File[] listOfFiles;
     private String[] filesInFolder;
     private int numberOfTxtFiles;
-    private String[] content = null;
     
     private directoryClass() {
         encSrcTextField = "";
@@ -114,91 +114,47 @@ public class directoryClass {
     // Method that goes through .txt files, encrypts them, and writes them
     // at the encryption destination folder.
     public void encryptFiles() {
-        
-            
-        encryptionThread myThread = null;
-        // Reading the content from the files and storing them in 'content[]'
-        
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        
+        Thread t;
         for (int k = 0; k < numberOfTxtFiles; k++) {
-            
-            int numberOfLines = 0;
-            try {
-                FileReader fileReader = new FileReader(encSrcTextField + "\\" + 
-                        filesInFolder[k]);
-                FileReader fr = new FileReader(encSrcTextField + "\\" + 
-                        filesInFolder[k]);
-
-                BufferedReader buffReader = new BufferedReader(fileReader);
-
-                while (buffReader.readLine() != null)
-                    numberOfLines++;
-
-                content = new String[numberOfLines];
-                buffReader = new BufferedReader(fr);
-                for (int i = 0; i < numberOfLines; i++) {
-                    content[i] = buffReader.readLine();
+            if (k % 3 == 0 ) {
+                if (k != 0) {
+                    try {
+                        synchronized (this) {
+                            wait();
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-                buffReader.close();
-                fr.close();
-                fileReader.close();
-
             }
-            catch (IOException ex) {
-                System.out.print("errir");
-            }
-            
-            myThread = new encryptionThread(this, k, true);
-            executor.execute(myThread);
+            t = new Thread (new encryptionThread(this, k, true));
+            t.start();
         }
+        
+        ptr.blockGUI(false);
     }
     
+    // Method that goes through .nj files, decrypts them, and writes them
+    // at the decryption destination folder.
     public void decryptFiles() {
-        encryptionThread myThread = null;
-        // Reading the content from the files and storing them in 'content[]'
-        
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        
+        Thread t;
         for (int k = 0; k < numberOfTxtFiles; k++) {
-        
-            int numberOfLines = 0;
-            try {
-                FileReader fileReader = new FileReader(decSrcTextField + "\\" + 
-                        filesInFolder[k]);
-                FileReader fr = new FileReader(decSrcTextField + "\\" + 
-                        filesInFolder[k]);
-
-                BufferedReader buffReader = new BufferedReader(fileReader);
-
-                while (buffReader.readLine() != null)
-                    numberOfLines++;
-
-                content = new String[numberOfLines];
-                buffReader = new BufferedReader(fr);
-                for (int i = 0; i < numberOfLines; i++) {
-                    content[i] = buffReader.readLine();
+            if (k % 3 == 0 ) {
+                if (k != 0) {
+                    try {
+                        synchronized (this) {
+                            wait();
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-                buffReader.close();
-                fr.close();
-                fileReader.close();
-
             }
-            catch (IOException ex) {
-                System.out.print("errir");
-            }
-            
-//            if (k == 3)
-//                try {
-//                    sleep(5000);
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(directoryClass.class.getName()).
-//                        log(Level.SEVERE, null, ex);
-//            }
-
-            myThread = new encryptionThread(this, k, false);
-            executor.execute(myThread);
+            t = new Thread (new encryptionThread(this, k, false));
+            t.start();
         }
+        
+        ptr.blockGUI(false);
     }
     
     // Method for setting the encrypted files' names for emergency save:
@@ -215,14 +171,6 @@ public class directoryClass {
                 encryptedFiles[counter++] = filesInFolder[i]; 
         }
     }
-    
-    public int getNumberOfLines() {
-        return content.length;
-    }
-
-    public String[] getContent() {
-        return content;
-    }
         
     public String[] getFilesInFolder() {
         return filesInFolder;
@@ -231,6 +179,3 @@ public class directoryClass {
         filesInFolder[index] = str;
     }
 }
-
-
-    

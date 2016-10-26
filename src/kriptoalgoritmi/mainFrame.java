@@ -272,6 +272,29 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             decBtn.setEnabled(true);
     }
     
+    public void blockGUI(boolean bool) {
+        if (bool) {
+            encSrcBtn.setEnabled(false);
+            encDstBtn.setEnabled(false);
+            encBtn.setEnabled(false);
+            decSrcBtn.setEnabled(false);
+            decDstBtn.setEnabled(false);
+            decBtn.setEnabled(false);
+            
+            encCheckBox.setEnabled(false);
+        }
+        else {
+            encSrcBtn.setEnabled(true);
+            encDstBtn.setEnabled(true);
+            encBtn.setEnabled(true);
+            decSrcBtn.setEnabled(true);
+            decDstBtn.setEnabled(true);
+            decBtn.setEnabled(true);
+            
+            encCheckBox.setEnabled(true);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -345,8 +368,10 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             if (sender == encBtn) {
                 if (!encSrcDir.getText().isEmpty() && 
                         !encDstDir.getText().isEmpty()) {
+                    blockGUI(true);
                     dir.readDirectory(dir.getEncSrc(), true);
                     dir.encryptFiles();
+                    blockGUI(false);
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Please choose "
@@ -360,8 +385,10 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             else {
                 if (!decSrcDir.getText().isEmpty() && 
                         !decDstDir.getText().isEmpty()) {
+                    blockGUI(true);
                     dir.readDirectory(dir.getDecSrc(), false);
                     dir.decryptFiles();
+                    blockGUI(false);
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Please choose "
