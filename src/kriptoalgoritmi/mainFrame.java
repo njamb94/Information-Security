@@ -98,9 +98,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         encDstBtn.setText("Choose");
 
         encCheckBox.setText("Turn On/Off automatic encryption.");
-        encCheckBox.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                encCheckBoxStateChanged(evt);
+        encCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                encCheckBoxMouseClicked(evt);
             }
         });
 
@@ -128,8 +128,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                             .addGroup(encriptionPanelLayout.createSequentialGroup()
                                 .addComponent(encBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(encCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 169, Short.MAX_VALUE)))
+                                .addComponent(encCheckBox)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         encriptionPanelLayout.setVerticalGroup(
@@ -220,12 +220,12 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(encriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(decriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(decriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(encriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,14 +243,20 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void encCheckBoxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_encCheckBoxStateChanged
-        if (encCheckBox.isSelected())
-            encBtn.setEnabled(false);
-        else
-            if (encCheckBox.isEnabled())
-                encBtn.setEnabled(true);
-    }//GEN-LAST:event_encCheckBoxStateChanged
+    // Checkbox mouse click event handler:
+    private void encCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encCheckBoxMouseClicked
+        if (encCheckBox.isSelected()) {
+            // Read the content of the encryption source folder:
+            dir.readDirectory(dir.getEncSrc(), true);
+            
+            // Start a new thread so GUI doesn't get blocked:
+            Thread t = new Thread(dir);
+            t.start();
+        }
+    }//GEN-LAST:event_encCheckBoxMouseClicked
 
+    // Method used for disabling controls if source & destination folders
+    // are not specified, otherwise enable them: 
     private void checkButtons() {
         // Disable 'Encrypt' button and automatic encryption checkbox if source 
         // & destination folders aren't chosen.
@@ -272,6 +278,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             decBtn.setEnabled(true);
     }
     
+    // Method used to disable GUI while encrypting/decrypting:
     public void blockGUI(boolean bool) {
         if (bool) {
             encSrcBtn.setEnabled(false);
@@ -279,19 +286,31 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             encBtn.setEnabled(false);
             decSrcBtn.setEnabled(false);
             decDstBtn.setEnabled(false);
+            
             decBtn.setEnabled(false);
             
+            if (encCheckBox.isSelected())
             encCheckBox.setEnabled(false);
         }
         else {
             encSrcBtn.setEnabled(true);
             encDstBtn.setEnabled(true);
-            encBtn.setEnabled(true);
             decSrcBtn.setEnabled(true);
             decDstBtn.setEnabled(true);
-            decBtn.setEnabled(true);
             
-            encCheckBox.setEnabled(true);
+            if (encSrcDir.getText().isEmpty() || encDstDir.getText().isEmpty()){
+                encBtn.setEnabled(false);
+                encCheckBox.setEnabled(false);
+            }
+            else {
+                encBtn.setEnabled(true);
+                encCheckBox.setEnabled(true);
+            }
+            
+            if (decSrcDir.getText().isEmpty() || decDstDir.getText().isEmpty())
+                decBtn.setEnabled(false);
+            else
+                decBtn.setEnabled(true);
         }
     }
     
@@ -364,14 +383,13 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         Object sender = e.getSource();
         
         if (sender == encBtn || sender == decBtn) {
-            // 'Encript' button
+            // If 'Encrypt' button was clicked:
             if (sender == encBtn) {
+                // And source & destination folders are selected:
                 if (!encSrcDir.getText().isEmpty() && 
                         !encDstDir.getText().isEmpty()) {
-                    blockGUI(true);
-                    dir.readDirectory(dir.getEncSrc(), true);
-                    dir.encryptFiles();
-                    blockGUI(false);
+                    // Call "Encrypt"'s button method:
+                    clickEncBtn();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Please choose "
@@ -381,14 +399,13 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             }
-            // 'Decript' button
+            // If 'Decrypt' button was clicked:
             else {
+                // And source & destination folders are selected:
                 if (!decSrcDir.getText().isEmpty() && 
                         !decDstDir.getText().isEmpty()) {
-                    blockGUI(true);
-                    dir.readDirectory(dir.getDecSrc(), false);
-                    dir.decryptFiles();
-                    blockGUI(false);
+                    // Call "Decrypt"'s button method:
+                    clickDecBtn();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Please choose "
@@ -400,6 +417,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             }
             }
         else {
+            // If one of the 'Choose' buttons has been clicked:
             fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Choose directory");
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -408,32 +426,78 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             if (fileChooser.showOpenDialog(null) == 
                     JFileChooser.APPROVE_OPTION) {
                 String path = fileChooser.getSelectedFile().toString();
-                // Encription source directory button
+                // If button for encryption's source folder was clicked:
                 if (sender == encSrcBtn) {
+                    // Set selected path to the textfield:
                     encSrcDir.setText(path);
+                    // Save selected path for later use:
                     dir.setEncSrc(path);
                 }
-                // Encription destination directory button
+                // If button for encryption's destination folder was clicked:
                 else if (sender == encDstBtn) {
+                    // Set selected path to the textfield:
                     encDstDir.setText(path);
+                    // Save selected path for later use:
                     dir.setEncDst(path);
+                    // If source folder for decryption hasn't been chosen yet,
+                    // set it to be encryption's destination folder:
                     if (decSrcDir.getText().isEmpty()) {
                         decSrcDir.setText(path);
                         dir.setDecSrc(path);
                     }
                 }
-                // Decription source directory button
+                // If button for decryption's source folder was clicked:
                 else if (sender == decSrcBtn) {
+                    // Set selected path to the textfield:
                     decSrcDir.setText(path);
+                    // Save selected path for later use:
                     dir.setDecSrc(path);
                 }
-                // Decription destination directory button
+                // If button for decryption's destination folder was clicked:
                 else if (sender == decDstBtn) {
+                    // Set selected path to the textfield:
                     decDstDir.setText(path);
+                    // Save selected path for later use:
                     dir.setDecDst(path);
                 }
             }
+            // In the end, enable button's if necessary:
             checkButtons();
         }
+    }
+    
+    // Method for setting the text on the 'Encrypt' button:
+    public void setEncBtnLabel(String txt) {
+        encBtn.setText(txt);
+    }
+    
+    // Method for setting the text on the 'Decrypt' button:
+    public void setDecBtnLabel(String txt) {
+        decBtn.setText(txt);
+    }
+    
+    // Method used by the 'Encrypt' button:
+    public void clickEncBtn() {
+        // Read the content of the encryption source folder:
+        dir.readDirectory(dir.getEncSrc(), true);
+
+        // Start new thread so the GUI doesn't block:
+        Thread t = new Thread(dir);
+        t.start();
+    }
+    
+    // Method used by the 'Decrypt' button:
+    public void clickDecBtn() {
+        // Read the content of the decryption source folder:
+        dir.readDirectory(dir.getDecSrc(), false);
+
+        // Start new thread so the GUI doesn't block:
+        Thread t = new Thread(dir);
+        t.start();
+    }
+    
+    // Getter for checkbox's status (selected or not):
+    public boolean isChecked() {
+        return encCheckBox.isSelected();
     }
 }

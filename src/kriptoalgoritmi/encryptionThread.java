@@ -19,21 +19,20 @@ import java.util.logging.Logger;
  */
 public class encryptionThread implements Runnable{
     
+    // Placeholder for the names of the .txt/.nj files:
     private String[] filesInFolder;
+    // Placeholders for source & destination paths for encryption & decryption:
     private String encSrcFolder;
     private String encDstFolder;
     private String decSrcFolder;
     private String decDstFolder;
     
+    // Index of the file in 'filesInFolder' being encrypted/decrypted:
     private int index;
+    // Flag for determinating if it's encryption/decryption (true/false):
     private boolean isEncryption;
 
-    // Thread constructor that saves all necessary information:
-    // Sentences in array to be encrypted/decrypted (text)
-    // Names of the .txt files to be encrypted/decrypted (files)
-    // Destination folder for encrypted/decrypted files (dst)
-    // Number of lines to be written (lines)
-    // Index of the .txt/.nj file being encrypted/decrypted (i)
+    // Thread constructor that sets above mentioned placeholders:
     public encryptionThread(directoryClass dir, int i, boolean bool) {
        
         filesInFolder = dir.getFilesInFolder();
@@ -48,51 +47,63 @@ public class encryptionThread implements Runnable{
     
    // Code for thread's execution
     public void run() {
-        // Text encryption:
+        // Create object for our encryption/decryption:
         cryptionClass cryptObj = new cryptionClass();
                     
         try {
             FileReader fileReader;
             BufferedReader buffReader;
             FileWriter fileWriter;
+            // If it's encryption:
             if (isEncryption) {
+                // Open the source folder, concatenated by the file's name:
                 fileReader = new FileReader(encSrcFolder + "\\" + 
                             filesInFolder[index]);
                 buffReader = new BufferedReader(fileReader);
                 
+                // Change that file's extension to '.nj' before being stored:
                 filesInFolder[index] = filesInFolder[index].replace(".txt", 
                         ".nj");
+                // Open the destination folder, concatenated by the file's new
+                // name:
                 fileWriter = new FileWriter(encDstFolder + "\\" + 
                     filesInFolder[index]);
             }
+            // If it's decryption:
             else {
+                // Open the source folder, concatenated by the file's name:
                 fileReader = new FileReader(decSrcFolder + "\\" + 
                             filesInFolder[index]);
                 buffReader = new BufferedReader(fileReader);
                 
-                 filesInFolder[index] = filesInFolder[index].replace(".nj", 
+                // Change that file's extension to '.txt' before being stored:
+                filesInFolder[index] = filesInFolder[index].replace(".nj", 
                         ".txt");
+                // Open the destination folder, concatenated by the file's new
+                // name:
                 fileWriter = new FileWriter(decDstFolder + "\\" + 
                     filesInFolder[index]);
             }
             BufferedWriter buffWriter = new BufferedWriter(fileWriter);
             
-            if (filesInFolder[index].contains("SWE")) {
-                int p;
-            }
-            
+            // Placeholder for the line that's next to be written: 
             String line;
+            // While there is something to read, read it, and store it to 'line'
             while ((line = buffReader.readLine()) != null) {
                 if (isEncryption){
+                    // Encrypt the line of text:
                     line = cryptObj.encrypt(line);
                 }
                 else {
+                    // Decrypt the line of text:
                     line = cryptObj.decrypt(line);
                 }
                 
+                // Write that line and go to the new line:
                 buffWriter.write(line);
                 buffWriter.newLine();
             }
+            // Close all readers/writers:
             buffReader.close();
             fileReader.close();
             buffWriter.close();
@@ -102,6 +113,7 @@ public class encryptionThread implements Runnable{
                     null, ex);
         }
         
+        // Thread awakening mechanism (for the thread that's waiting):
         if (index % 2 == 0)
             synchronized (directoryClass.getInstance()) {
                 directoryClass.getInstance().notify();
