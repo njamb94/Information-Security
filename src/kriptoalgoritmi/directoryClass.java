@@ -285,4 +285,40 @@ public class directoryClass implements Runnable{
     public void setFilesInFolder(String str, int index) {
         filesInFolder[index] = str;
     }
+    
+    // 'Remove' already encrypted/decrypted files from the working list
+    // that are located at the destination folder:
+    public void clearExisting() {
+        File dstFolder;
+        // Open destination folder:
+        if (encDec)
+            dstFolder = new File(getEncDst());
+        else
+            dstFolder = new File(getDecDst());
+        
+        // List all the files from the folder:
+        File[] allFiles = dstFolder.listFiles();
+        
+        // Placeholder for the file name:
+        String tmp;
+        for (int i = 0; i < filesInFolder.length; i++) {
+            for (int k = 0; k < allFiles.length; k++) {
+                tmp = allFiles[k].getName();
+                
+                if (encDec)
+                    // If working file already exists 
+                    // (compare without extension '.nj')
+                    if (filesInFolder[i]
+                            .contains(tmp.substring(0, tmp.length()-3)))
+                        filesInFolder[i] = "";
+                else
+                        
+                    // If working file already exists 
+                    // (compare without extension '.txt')
+                    if (filesInFolder[i]
+                            .contains(tmp.substring(0, tmp.length()-4)))
+                        filesInFolder[i] = "";
+            }
+        }
+    }
 }

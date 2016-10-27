@@ -51,63 +51,72 @@ public class encryptionThread implements Runnable{
         cryptionClass cryptObj = new cryptionClass();
                     
         try {
-            FileReader fileReader;
-            BufferedReader buffReader;
-            FileWriter fileWriter;
+            FileReader fileReader = null;
+            BufferedReader buffReader = null;
+            FileWriter fileWriter = null;
+            BufferedWriter buffWriter = null;
             // If it's encryption:
             if (isEncryption) {
-                // Open the source folder, concatenated by the file's name:
-                fileReader = new FileReader(encSrcFolder + "\\" + 
-                            filesInFolder[index]);
-                buffReader = new BufferedReader(fileReader);
-                
-                // Change that file's extension to '.nj' before being stored:
-                filesInFolder[index] = filesInFolder[index].replace(".txt", 
-                        ".nj");
-                // Open the destination folder, concatenated by the file's new
-                // name:
-                fileWriter = new FileWriter(encDstFolder + "\\" + 
-                    filesInFolder[index]);
+                if (!filesInFolder[index].isEmpty()) {
+                    // Open the source folder, concatenated by the file's name:
+                    fileReader = new FileReader(encSrcFolder + "\\" + 
+                                filesInFolder[index]);
+                    buffReader = new BufferedReader(fileReader);
+                                
+                    // Change that file's extension to '.nj' before being stored:
+                    filesInFolder[index] = filesInFolder[index].replace(".txt", 
+                            ".nj");
+                    // Open the destination folder, concatenated by the file's new
+                    // name:
+                    fileWriter = new FileWriter(encDstFolder + "\\" + 
+                        filesInFolder[index]);
+                    buffWriter = new BufferedWriter(fileWriter);
+                }
             }
             // If it's decryption:
             else {
+                if (!filesInFolder[index].isEmpty()) {
                 // Open the source folder, concatenated by the file's name:
-                fileReader = new FileReader(decSrcFolder + "\\" + 
-                            filesInFolder[index]);
-                buffReader = new BufferedReader(fileReader);
-                
-                // Change that file's extension to '.txt' before being stored:
-                filesInFolder[index] = filesInFolder[index].replace(".nj", 
-                        ".txt");
-                // Open the destination folder, concatenated by the file's new
-                // name:
-                fileWriter = new FileWriter(decDstFolder + "\\" + 
-                    filesInFolder[index]);
+                    fileReader = new FileReader(decSrcFolder + "\\" + 
+                                filesInFolder[index]);
+                    buffReader = new BufferedReader(fileReader);
+                    
+                    // Change that file's extension to '.txt' before being stored:
+                    filesInFolder[index] = filesInFolder[index].replace(".nj", 
+                            ".txt");
+                    // Open the destination folder, concatenated by the file's new
+                    // name:
+                    fileWriter = new FileWriter(decDstFolder + "\\" + 
+                        filesInFolder[index]);
+                    buffWriter = new BufferedWriter(fileWriter);
+                }
             }
-            BufferedWriter buffWriter = new BufferedWriter(fileWriter);
             
-            // Placeholder for the line that's next to be written: 
-            String line;
-            // While there is something to read, read it, and store it to 'line'
-            while ((line = buffReader.readLine()) != null) {
-                if (isEncryption){
-                    // Encrypt the line of text:
-                    line = cryptObj.encrypt(line);
-                }
-                else {
-                    // Decrypt the line of text:
-                    line = cryptObj.decrypt(line);
-                }
-                
-                // Write that line and go to the new line:
-                buffWriter.write(line);
-                buffWriter.newLine();
+            if (!filesInFolder[index].isEmpty()) {
+                // Placeholder for the line that's next to be written: 
+                String line;
+                // While there is something to read, read it, and store it to 
+                // 'line'
+                while ((line = buffReader.readLine()) != null) {
+                        if (isEncryption){
+                            // Encrypt the line of text:
+                            line = cryptObj.encrypt(line);
+                        }
+                        else {
+                            // Decrypt the line of text:
+                            line = cryptObj.decrypt(line);
+                        }
+
+                        // Write that line and go to the new line:
+                        buffWriter.write(line);
+                        buffWriter.newLine();
+                    }
+                    // Close all readers/writers:
+                    buffReader.close();
+                    fileReader.close();
+                    buffWriter.close();
+                    fileWriter.close();
             }
-            // Close all readers/writers:
-            buffReader.close();
-            fileReader.close();
-            buffWriter.close();
-            fileWriter.close();
         } catch (IOException ex) {
             Logger.getLogger(directoryClass.class.getName()).log(Level.SEVERE, 
                     null, ex);

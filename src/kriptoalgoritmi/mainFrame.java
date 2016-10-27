@@ -246,6 +246,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     // Checkbox mouse click event handler:
     private void encCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encCheckBoxMouseClicked
         if (encCheckBox.isSelected()) {
+            // Get the paths from GUI and store them in 'dir' variable:
+            fillDirClass();
+            
             // Read the content of the encryption source folder:
             dir.readDirectory(dir.getEncSrc(), true);
             
@@ -289,8 +292,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             
             decBtn.setEnabled(false);
             
-            if (encCheckBox.isSelected())
-            encCheckBox.setEnabled(false);
+            //if (encCheckBox.isSelected())
+                encCheckBox.setEnabled(false);
         }
         else {
             encSrcBtn.setEnabled(true);
@@ -478,6 +481,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     
     // Method used by the 'Encrypt' button:
     public void clickEncBtn() {
+        // Get the paths from GUI and store them in 'dir' variable:
+        fillDirClass();
         // Read the content of the encryption source folder:
         dir.readDirectory(dir.getEncSrc(), true);
 
@@ -488,6 +493,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     
     // Method used by the 'Decrypt' button:
     public void clickDecBtn() {
+        // Get the paths from GUI and store them in 'dir' variable:
+        fillDirClass();
         // Read the content of the decryption source folder:
         dir.readDirectory(dir.getDecSrc(), false);
 
@@ -499,5 +506,13 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     // Getter for checkbox's status (selected or not):
     public boolean isChecked() {
         return encCheckBox.isSelected();
+    }
+    
+    // Setter method for paths from GUI:
+    private void fillDirClass() {
+        dir.setEncSrc(encSrcDir.getText());
+        dir.setEncDst(encDstDir.getText());
+        dir.setDecSrc(decSrcDir.getText());
+        dir.setDecDst(decDstDir.getText());
     }
 }
