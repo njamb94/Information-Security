@@ -14,8 +14,9 @@ public class cryptionClass {
     private String[] words;
     // Word count:
     private int numberOfWords;
-    
-    public cryptionClass() {
+    private int wordsPerGroup;
+    public cryptionClass(int number) {
+        wordsPerGroup = number;
     }
     
     // Method that returns array of Strings of the working text:
@@ -82,136 +83,139 @@ public class cryptionClass {
     
     // Encryption method:
     private void encryptText() {
-        String tmp;
-        // Leftover words:
-        int code = 0;
-        
-        // Leftover words' count after separating them in the chunks of 5 words:
-        switch (numberOfWords % 5) {
-            case 2: {
-                code = 2;
-                break;
-            }
-            case 3: {
-                code = 3;
-                break;
-            }
-            case 4: {
-                code = 4;
-                break;
-            }
-        }
-        // Index of the words in the array:
-        int i = 0;
-        // If there are more words in the line of text than the leftover count:
-        if (numberOfWords > code) {
-            // While there are chunks of 5 words in the line, substitute their
-            // positions:
-            while (numberOfWords - i >= 5) {
-                tmp = words[i];
-                words[i] = words[i + 3];
-                words[i + 3] = words[i + 2];
-                words[i + 2] = words[i + 4];
-                words[i + 4] = words[i + 1];
-                words[i + 1] = tmp;
-                // After shuffling them, go to the next 5 words:
-                i = i + 5;
-            }
-        }
-        else {
-            i = 0;
-        }
-        // If there are 2, 3 or 4 words as 'leftover', shuffle them aswell:
-        switch (code) {
-            case 2: {
-                tmp = words[i];
-                words[i] = words[i + 1];
-                words[i + 1] = tmp;
-                break;
-            }
-            case 3: {
-                tmp = words[i];
-                words[i] = words[i + 1];
-                words[i + 1] = words[i + 2];
-                words[i + 2] = tmp;
-                break;
-            }
-            case 4: {
-                tmp = words[i];
-                words[i] = words[i + 3];
-                words[i + 3] = words[i + 1];
-                words[i + 1] = words[i + 2];
-                words[i + 2] = tmp;
-                break;
-            }
-        }
+//        String tmp;
+//        // Leftover words:
+//        int code = 0;
+//        
+//        // Leftover words' count after separating them in the chunks of 5 words:
+//        switch (numberOfWords % 5) {
+//            case 2: {
+//                code = 2;
+//                break;
+//            }
+//            case 3: {
+//                code = 3;
+//                break;
+//            }
+//            case 4: {
+//                code = 4;
+//                break;
+//            }
+//        }
+//        // Index of the words in the array:
+//        int i = 0;
+//        // If there are more words in the line of text than the leftover count:
+//        if (numberOfWords > code) {
+//            // While there are chunks of 5 words in the line, substitute their
+//            // positions:
+//            while (numberOfWords - i >= 5) {
+//                tmp = words[i];
+//                words[i] = words[i + 3];
+//                words[i + 3] = words[i + 2];
+//                words[i + 2] = words[i + 4];
+//                words[i + 4] = words[i + 1];
+//                words[i + 1] = tmp;
+//                // After shuffling them, go to the next 5 words:
+//                i = i + 5;
+//            }
+//        }
+//        else {
+//            i = 0;
+//        }
+//        // If there are 2, 3 or 4 words as 'leftover', shuffle them aswell:
+//        switch (code) {
+//            case 2: {
+//                tmp = words[i];
+//                words[i] = words[i + 1];
+//                words[i + 1] = tmp;
+//                break;
+//            }
+//            case 3: {
+//                tmp = words[i];
+//                words[i] = words[i + 1];
+//                words[i + 1] = words[i + 2];
+//                words[i + 2] = tmp;
+//                break;
+//            }
+//            case 4: {
+//                tmp = words[i];
+//                words[i] = words[i + 3];
+//                words[i + 3] = words[i + 1];
+//                words[i + 1] = words[i + 2];
+//                words[i + 2] = tmp;
+//                break;
+//            }
+//        }
+
+        enc();
     }
     
     // Decryption method:
     private void decryptText() {
-        String tmp;
-        // Leftover words:
-        int code = 0;
-        
-        // Leftover words' count after separating them in the chunks of 5 words:
-        switch (numberOfWords % 5) {
-            case 2: {
-                code = 2;
-                break;
-            }
-            case 3: {
-                code = 3;
-                break;
-            }
-            case 4: {
-                code = 4;
-                break;
-            }
-        }
-        // Index of the words in the array:
-        int i = 0;
-        // If there are more words in the line of text than the leftover count:
-        if (numberOfWords > code) {
-            // While there are chunks of 5 words in the line, substitute their
-            // positions back:
-            while (numberOfWords - i >= 5) {
-                tmp = words[i + 1];
-                words[i + 1] = words[i + 4];
-                words[i + 4] = words[i + 2];
-                words[i + 2] = words[i + 3];
-                words[i + 3] = words[i];
-                words[i] = tmp;
-                // After decrypting them, go to the next 5 words:
-                i = i + 5;
-            }
-        }
-        else {
-            i = 0;
-        }
-        // If there are 2, 3 or 4 words as 'leftover', shuffle them back aswell:
-        switch (code) {
-            case 2: {
-                tmp = words[i + 1];
-                words[i + 1] = words[i];
-                words[i] = tmp;
-                break;
-            }
-            case 3: {
-                tmp = words[i + 2];
-                words[i + 2] = words[i + 1];
-                words[i + 1] = words[i];
-                words[i] = tmp;
-                break;
-            }
-            case 4: {
-                tmp = words[i + 2];
-                words[i + 2] = words[i + 1];
-                words[i + 1] = words[i + 3];
-                words[i + 3] = words[i];
-                words[i] = tmp;
-                break;
-            }
-        }
+//        String tmp;
+//        // Leftover words:
+//        int code = 0;
+//        
+//        // Leftover words' count after separating them in the chunks of 5 words:
+//        switch (numberOfWords % 5) {
+//            case 2: {
+//                code = 2;
+//                break;
+//            }
+//            case 3: {
+//                code = 3;
+//                break;
+//            }
+//            case 4: {
+//                code = 4;
+//                break;
+//            }
+//        }
+//        // Index of the words in the array:
+//        int i = 0;
+//        // If there are more words in the line of text than the leftover count:
+//        if (numberOfWords > code) {
+//            // While there are chunks of 5 words in the line, substitute their
+//            // positions back:
+//            while (numberOfWords - i >= 5) {
+//                tmp = words[i + 1];
+//                words[i + 1] = words[i + 4];
+//                words[i + 4] = words[i + 2];
+//                words[i + 2] = words[i + 3];
+//                words[i + 3] = words[i];
+//                words[i] = tmp;
+//                // After decrypting them, go to the next 5 words:
+//                i = i + 5;
+//            }
+//        }
+//        else {
+//            i = 0;
+//        }
+//        // If there are 2, 3 or 4 words as 'leftover', shuffle them back aswell:
+//        switch (code) {
+//            case 2: {
+//                tmp = words[i + 1];
+//                words[i + 1] = words[i];
+//                words[i] = tmp;
+//                break;
+//            }
+//            case 3: {
+//                tmp = words[i + 2];
+//                words[i + 2] = words[i + 1];
+//                words[i + 1] = words[i];
+//                words[i] = tmp;
+//                break;
+//            }
+//            case 4: {
+//                tmp = words[i + 2];
+//                words[i + 2] = words[i + 1];
+//                words[i + 1] = words[i + 3];
+//                words[i + 3] = words[i];
+//                words[i] = tmp;
+//                break;
+//            }
+//        }
+        dec();
     }
     
     // Method for printing all words to console:
@@ -260,5 +264,66 @@ public class cryptionClass {
         
         // Return the sentence as whole:
         return tmp;   
+    }
+    
+    public void enc() {
+        String tmp;
+        int pom = wordsPerGroup;
+        int backIndex = pom - 1;
+        int halfGroup;
+        
+        for (int i = 0; i < words.length && pom < words.length; i += wordsPerGroup) {
+
+            backIndex = pom - 1;
+            halfGroup = (((backIndex - i)/2)+i);
+
+            for (int k = i; k < halfGroup; k++, backIndex--) {
+                tmp = words[k];
+                words[k] = words[backIndex];
+                words[backIndex] = tmp;
+            }
+
+            backIndex = pom - 1;
+            for (int k = i; k < pom && halfGroup < pom; k++, halfGroup++) {
+                if (k % 2 == 0) {
+                    tmp = words[k];
+                    words[k] = words[halfGroup];
+                    words[halfGroup] = tmp;
+                }
+            }
+            pom += wordsPerGroup;
+        }
+    }
+    
+    public void dec() {
+        String tmp;
+        int pom = wordsPerGroup;
+        int backIndex = pom - 1;
+        int halfGroup;
+        
+        for (int i = 0; i < words.length && pom < words.length; i += wordsPerGroup) { 
+
+                backIndex = pom - 1;
+                halfGroup = (((backIndex - i)/2)+i);
+
+                for (int k = i; k < pom && halfGroup < pom; k++, halfGroup++) {
+                    if (k % 2 == 0) {
+                        tmp = words[k];
+                        words[k] = words[halfGroup];
+                        words[halfGroup] = tmp;
+                    }
+                }
+                
+                backIndex = pom - 1;
+                halfGroup = (((backIndex - i)/2)+i);
+                for (int k = i; k < halfGroup; k++, backIndex--) {
+                    tmp = words[k];
+                    words[k] = words[backIndex];
+                    words[backIndex] = tmp;
+                }
+                
+                
+                pom += wordsPerGroup;
+        }
     }
 }

@@ -31,10 +31,14 @@ public class encryptionThread implements Runnable{
     private int index;
     // Flag for determinating if it's encryption/decryption (true/false):
     private boolean isEncryption;
-
+    
+    private int wordsPerGroup;
+    
+    private directoryClass d;
     // Thread constructor that sets above mentioned placeholders:
     public encryptionThread(directoryClass dir, int i, boolean bool) {
        
+        d = dir;
         filesInFolder = dir.getFilesInFolder();
         encSrcFolder = dir.getEncSrc();
         encDstFolder = dir.getEncDst();
@@ -43,13 +47,20 @@ public class encryptionThread implements Runnable{
         
         index = i;
         isEncryption = bool;
+        wordsPerGroup = dir.retWordsPerGroup();
     }
     
    // Code for thread's execution
     public void run() {
         // Create object for our encryption/decryption:
-        cryptionClass cryptObj = new cryptionClass();
-                    
+        cryptionClass cryptObj = null;
+        
+        if (isEncryption)
+            cryptObj = new cryptionClass(wordsPerGroup);
+            
+//////////////////////////////////////////
+/// Na Windows-u, zameniti "/" sa "\\" ///
+//////////////////////////////////////////        
         try {
             FileReader fileReader = null;
             BufferedReader buffReader = null;
@@ -59,7 +70,7 @@ public class encryptionThread implements Runnable{
             if (isEncryption) {
                 if (!filesInFolder[index].isEmpty()) {
                     // Open the source folder, concatenated by the file's name:
-                    fileReader = new FileReader(encSrcFolder + "\\" + 
+                    fileReader = new FileReader(encSrcFolder + "/" + 
                                 filesInFolder[index]);
                     buffReader = new BufferedReader(fileReader);
                                 
@@ -68,7 +79,7 @@ public class encryptionThread implements Runnable{
                             ".nj");
                     // Open the destination folder, concatenated by the file's new
                     // name:
-                    fileWriter = new FileWriter(encDstFolder + "\\" + 
+                    fileWriter = new FileWriter(encDstFolder + "/" + 
                         filesInFolder[index]);
                     buffWriter = new BufferedWriter(fileWriter);
                 }
@@ -76,17 +87,18 @@ public class encryptionThread implements Runnable{
             // If it's decryption:
             else {
                 if (!filesInFolder[index].isEmpty()) {
-                // Open the source folder, concatenated by the file's name:
-                    fileReader = new FileReader(decSrcFolder + "\\" + 
+                    // Open the source folder, concatenated by the file's name:
+                    fileReader = new FileReader(decSrcFolder + "/" + 
                                 filesInFolder[index]);
                     buffReader = new BufferedReader(fileReader);
                     
-                    // Change that file's extension to '.txt' before being stored:
+                    // Change that file's extension to '.txt' before being 
+                    // stored:
                     filesInFolder[index] = filesInFolder[index].replace(".nj", 
                             ".txt");
-                    // Open the destination folder, concatenated by the file's new
-                    // name:
-                    fileWriter = new FileWriter(decDstFolder + "\\" + 
+                    // Open the destination folder, concatenated by the file's 
+                    // new name:
+                    fileWriter = new FileWriter(decDstFolder + "/" + 
                         filesInFolder[index]);
                     buffWriter = new BufferedWriter(fileWriter);
                 }
@@ -97,20 +109,38 @@ public class encryptionThread implements Runnable{
                 String line;
                 // While there is something to read, read it, and store it to 
                 // 'line'
+                boolean flag = true;
                 while ((line = buffReader.readLine()) != null) {
                         if (isEncryption){
+                            if (flag) {
+                                buffWriter.write(String.valueOf(wordsPerGroup));
+                                buffWriter.newLine();
+                                flag = false;
+                            }
                             // Encrypt the line of text:
                             line = cryptObj.encrypt(line);
+                            // Write that line and go to the new line:
+                            buffWriter.write(line);
+                            buffWriter.newLine();
                         }
                         else {
-                            // Decrypt the line of text:
-                            line = cryptObj.decrypt(line);
-                        }
-
-                        // Write that line and go to the new line:
-                        buffWriter.write(line);
-                        buffWriter.newLine();
+                            if (flag) {
+                                int ourCode = Integer.valueOf(line);
+                                d.setWordsPerGroup(ourCode);
+                                flag = false;
+                                
+                                cryptObj = new cryptionClass(ourCode);
+                            }
+                            else {
+                                // Decrypt the line of text:
+                                line = cryptObj.decrypt(line);
+                                // Write that line and go to the new line:
+                                buffWriter.write(line);
+                                buffWriter.newLine();
+                            }
+                        }  
                     }
+                    flag = true;
                     // Close all readers/writers:
                     buffReader.close();
                     fileReader.close();

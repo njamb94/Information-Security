@@ -43,6 +43,7 @@ public class directoryClass implements Runnable{
     private int numberOfTxtFiles;
     // Flag: True - encryption; False - decryption:
     private boolean encDec;
+    private int wordsPerGroup;
     private WatchService watcher;
     
     private directoryClass() {
@@ -149,7 +150,9 @@ public class directoryClass implements Runnable{
         // While there are files in folder:
         for (int i = 0; i < listOfFiles.length; i++) {
             // Check if it's encryption and if it's automated:
-            if(isEncrypt && ptr.isChecked()) {
+            if(isEncrypt) {
+                wordsPerGroup = ptr.getNumberPerGroup();
+                
                 // Check if the file is .txt:
                 if (listOfFiles[i].isFile() && 
                         listOfFiles[i].getName().contains(".txt")) {
@@ -174,6 +177,7 @@ public class directoryClass implements Runnable{
         // While there are files in the folder:
         for (int i = 0; i < listOfFiles.length; i++) {
             if (isEncrypt) {
+                wordsPerGroup = ptr.getNumberPerGroup();
                 // If it's .txt file:
                 if (listOfFiles[i].isFile() && 
                         listOfFiles[i].getName().contains(".txt")) {
@@ -200,6 +204,7 @@ public class directoryClass implements Runnable{
     // Method that goes through .txt files, encrypts them, and writes them
     // at the encryption destination folder.
     public void encryptFiles() {
+        
         // Block (read disable) GUI so the user doesn't do something bad:
         ptr.blockGUI(true);
         // Set the text on the encryption button so the user knows that
@@ -320,5 +325,13 @@ public class directoryClass implements Runnable{
                         filesInFolder[i] = "";
             }
         }
+    }
+    
+    public int retWordsPerGroup() {
+        return wordsPerGroup;
+    }
+    
+    public void setWordsPerGroup(int number) {
+        wordsPerGroup = number;
     }
 }

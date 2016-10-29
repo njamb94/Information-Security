@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -67,6 +68,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         encDstBtn = new javax.swing.JButton();
         encCheckBox = new javax.swing.JCheckBox();
         encBtn = new javax.swing.JButton();
+        numberOfWordsPerGroupTextField = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         decriptionPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         decSrcDir = new javax.swing.JTextField();
@@ -97,7 +100,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
 
         encDstBtn.setText("Choose");
 
-        encCheckBox.setText("Turn On/Off automatic encryption.");
+        encCheckBox.setText("Turn on automatic encryption.");
         encCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 encCheckBoxMouseClicked(evt);
@@ -105,6 +108,21 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         });
 
         encBtn.setText("Encrypt");
+
+        numberOfWordsPerGroupTextField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        numberOfWordsPerGroupTextField.setToolTipText("");
+        numberOfWordsPerGroupTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                numberOfWordsPerGroupTextFieldMouseClicked(evt);
+            }
+        });
+        numberOfWordsPerGroupTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                numberOfWordsPerGroupTextFieldKeyReleased(evt);
+            }
+        });
+
+        jLabel6.setText("# of words per group:");
 
         javax.swing.GroupLayout encriptionPanelLayout = new javax.swing.GroupLayout(encriptionPanel);
         encriptionPanel.setLayout(encriptionPanelLayout);
@@ -124,12 +142,18 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     .addGroup(encriptionPanelLayout.createSequentialGroup()
                         .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(encriptionPanelLayout.createSequentialGroup()
+                        .addComponent(encBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(encCheckBox)
+                        .addGap(18, 18, 18)
+                        .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(encriptionPanelLayout.createSequentialGroup()
-                                .addComponent(encBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(encCheckBox)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jLabel6)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(numberOfWordsPerGroupTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         encriptionPanelLayout.setVerticalGroup(
@@ -147,10 +171,13 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                 .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(encDstDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(encDstBtn))
-                .addGap(18, 18, 18)
+                .addGap(1, 1, 1)
+                .addComponent(jLabel6)
+                .addGap(1, 1, 1)
                 .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(encBtn)
-                    .addComponent(encCheckBox))
+                    .addComponent(encCheckBox)
+                    .addComponent(numberOfWordsPerGroupTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -192,7 +219,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                         .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(decSrcBtn)
                             .addComponent(decDstBtn))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
         decriptionPanelLayout.setVerticalGroup(
             decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,6 +273,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     // Checkbox mouse click event handler:
     private void encCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encCheckBoxMouseClicked
         if (encCheckBox.isSelected()) {
+            encCheckBox.setText("Turn off automatic encryption.");
+            
             // Get the paths from GUI and store them in 'dir' variable:
             fillDirClass();
             
@@ -256,7 +285,33 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             Thread t = new Thread(dir);
             t.start();
         }
+        else
+            encCheckBox.setText("Turn on automatic encryption.");
     }//GEN-LAST:event_encCheckBoxMouseClicked
+
+    private void numberOfWordsPerGroupTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_numberOfWordsPerGroupTextFieldMouseClicked
+        
+        
+        if (numberOfWordsPerGroupTextField.getText()
+                .equals("# of words per group")) 
+            numberOfWordsPerGroupTextField.setText("");
+    }//GEN-LAST:event_numberOfWordsPerGroupTextFieldMouseClicked
+
+    private void numberOfWordsPerGroupTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberOfWordsPerGroupTextFieldKeyReleased
+        try {
+            if (!numberOfWordsPerGroupTextField.getText().isEmpty()) {
+                            int number = Integer.parseInt(numberOfWordsPerGroupTextField.getText());
+                            dir.setWordsPerGroup(number);
+            }
+        }
+        catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, 
+                    "You're trying to enter a NON-NUMERAL value. "
+                        + "Please try again using a number.", 
+                    "You've done goofed!", JOptionPane.INFORMATION_MESSAGE);
+                numberOfWordsPerGroupTextField.setText("");
+        }
+    }//GEN-LAST:event_numberOfWordsPerGroupTextFieldKeyReleased
 
     // Method used for disabling controls if source & destination folders
     // are not specified, otherwise enable them: 
@@ -291,15 +346,15 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             decDstBtn.setEnabled(false);
             
             decBtn.setEnabled(false);
-            
-            //if (encCheckBox.isSelected())
-                encCheckBox.setEnabled(false);
+            encCheckBox.setEnabled(false);
+            numberOfWordsPerGroupTextField.setEnabled(false);
         }
         else {
             encSrcBtn.setEnabled(true);
             encDstBtn.setEnabled(true);
             decSrcBtn.setEnabled(true);
             decDstBtn.setEnabled(true);
+            numberOfWordsPerGroupTextField.setEnabled(true);  
             
             if (encSrcDir.getText().isEmpty() || encDstDir.getText().isEmpty()){
                 encBtn.setEnabled(false);
@@ -379,6 +434,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField numberOfWordsPerGroupTextField;
     // End of variables declaration//GEN-END:variables
     
     @Override
@@ -387,38 +444,59 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         
         if (sender == encBtn || sender == decBtn) {
             // If 'Encrypt' button was clicked:
-            if (sender == encBtn) {
-                // And source & destination folders are selected:
-                if (!encSrcDir.getText().isEmpty() && 
-                        !encDstDir.getText().isEmpty()) {
-                    // Call "Encrypt"'s button method:
-                    clickEncBtn();
+            
+            try {
+                if (sender == encBtn) {
+
+
+                    
+                    if (!numberOfWordsPerGroupTextField.getText().isEmpty()) {
+                        int number = Integer.parseInt(numberOfWordsPerGroupTextField.getText());
+                        dir.setWordsPerGroup(number);
+                    }
+                    
+
+
+                    // And source & destination folders are selected:
+                    if (!encSrcDir.getText().isEmpty() && 
+                            !encDstDir.getText().isEmpty()) {
+                        // Call "Encrypt"'s button method:
+                        clickEncBtn();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Please choose "
+                                + "encription source & destination folders before "
+                                + "retrying to encript files.",
+                                "Folders not specified", 
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
+
+                // If 'Decrypt' button was clicked:
                 else {
-                    JOptionPane.showMessageDialog(null, "Please choose "
-                            + "encription source & destination folders before "
-                            + "retrying to encript files.",
-                            "Folders not specified", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                    // And source & destination folders are selected:
+                    if (!decSrcDir.getText().isEmpty() && 
+                            !decDstDir.getText().isEmpty()) {
+                        // Call "Decrypt"'s button method:
+                        clickDecBtn();
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Please choose "
+                                + "decription source & destination folders before "
+                                + "retrying to encript files.",
+                                "Folders not specified",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
-            // If 'Decrypt' button was clicked:
-            else {
-                // And source & destination folders are selected:
-                if (!decSrcDir.getText().isEmpty() && 
-                        !decDstDir.getText().isEmpty()) {
-                    // Call "Decrypt"'s button method:
-                    clickDecBtn();
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Please choose "
-                            + "decription source & destination folders before "
-                            + "retrying to encript files.",
-                            "Folders not specified",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, 
+                    "You're trying to enter a NON-NUMERAL value. "
+                        + "Please try again using a number.", 
+                    "You've done goofed!", JOptionPane.INFORMATION_MESSAGE);
+               // numberOfWordsPerGroupTextField.setText("# of words per group");
             }
-            }
+        }
         else {
             // If one of the 'Choose' buttons has been clicked:
             fileChooser = new JFileChooser();
@@ -481,14 +559,28 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     
     // Method used by the 'Encrypt' button:
     public void clickEncBtn() {
-        // Get the paths from GUI and store them in 'dir' variable:
-        fillDirClass();
-        // Read the content of the encryption source folder:
-        dir.readDirectory(dir.getEncSrc(), true);
+        try {
+            if (!numberOfWordsPerGroupTextField.getText().isEmpty()) {
+                        int number = Integer.parseInt(numberOfWordsPerGroupTextField.getText());
+                        dir.setWordsPerGroup(number);
+            }
+            
+            // Get the paths from GUI and store them in 'dir' variable:
+            fillDirClass();
+            // Read the content of the encryption source folder:
+            dir.readDirectory(dir.getEncSrc(), true);
 
-        // Start new thread so the GUI doesn't block:
-        Thread t = new Thread(dir);
-        t.start();
+            // Start new thread so the GUI doesn't block:
+            Thread t = new Thread(dir);
+            t.start();
+        }
+        catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, 
+                    "You're trying to enter a NON-NUMERAL value. "
+                        + "Please try again using a number.", 
+                    "You've done goofed!", JOptionPane.INFORMATION_MESSAGE);
+               // numberOfWordsPerGroupTextField.setText("# of words per group");
+            }
     }
     
     // Method used by the 'Decrypt' button:
@@ -514,5 +606,13 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         dir.setEncDst(encDstDir.getText());
         dir.setDecSrc(decSrcDir.getText());
         dir.setDecDst(decDstDir.getText());
+    }
+    
+    public int getNumberPerGroup() {
+       return Integer.valueOf(numberOfWordsPerGroupTextField.getText());
+    }
+    
+    public JTextField returnNumberTextFiels() {
+        return numberOfWordsPerGroupTextField;
     }
 }
