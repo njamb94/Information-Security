@@ -15,6 +15,7 @@ public class a5_1Cryption {
     private int[] smallReg = new int[19]; // 0-18
     private int[] midReg = new int[22]; // 0-21
     private int[] bigReg = new int[23]; // 0-22
+    private int majorityVote;
     
     public a5_1Cryption(String key) {
         this.key = key;
@@ -42,6 +43,7 @@ public class a5_1Cryption {
             }
 
             bigReg[22] = 0;
+            majorityVote = 0;
     }
     
     // Method for filling shifting registers with the key value:
@@ -83,10 +85,14 @@ public class a5_1Cryption {
         else
             ones++;
         
-        if (zeros > ones)
+        if (zeros > ones) {
+            majorityVote = 0;
             return shiftRegs(0);
-        else
+        }
+        else {
+            majorityVote = 1;
             return shiftRegs(1);
+        }
     }
 
     // Method for checking if majority in significant bits of register are 0/1.
@@ -183,8 +189,18 @@ public class a5_1Cryption {
     public byte decrypt() {
         return encrypt();
     }
-    ////////////////////////////////////////////////////////////////////////////
+    
+    // Getter for key:
     public String getKey() {
         return key;
+    }
+    
+    // Setter for key:
+    public void setKey(String key) {
+        this.key = key;
+    }
+    
+    public int getMajorityVote() {
+        return majorityVote;
     }
 }
