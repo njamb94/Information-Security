@@ -15,6 +15,7 @@ public class cryptionClass {
     // Word count:
     private int numberOfWords;
     private int wordsPerGroup;
+    
     public cryptionClass(int number) {
         wordsPerGroup = number;
     }

@@ -32,7 +32,7 @@ public class directoryClass implements Runnable{
     private String decSrcTextField;
     private String decDstTextField;
     // Reference holder for the main window:
-    private mainFrame ptr;
+    private electionFrame ptr;
     
     // Container for files in encryption/decryption source folder:
     private File[] listOfFiles;
@@ -128,7 +128,7 @@ public class directoryClass implements Runnable{
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(mainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(electionFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
             }
     }
@@ -197,7 +197,7 @@ public class directoryClass implements Runnable{
     }
     
     // Method for setting the reference of the main window:
-    public void setListener(mainFrame frm) {
+    public void setListener(electionFrame frm) {
         ptr = frm;
     }
     
@@ -327,10 +327,12 @@ public class directoryClass implements Runnable{
         }
     }
     
+    // Getter for user's choice of words per group for encryption:
     public int retWordsPerGroup() {
         return wordsPerGroup;
     }
     
+    // Setter for user's choice of words per group for encryption:
     public void setWordsPerGroup(int number) {
         wordsPerGroup = number;
     }

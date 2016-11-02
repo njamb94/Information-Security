@@ -6,6 +6,7 @@
 
 package kriptoalgoritmi;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,19 +14,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
  *
  * @author Njamb
  */
-public class mainFrame extends javax.swing.JFrame implements ActionListener {
+public class electionFrame extends javax.swing.JFrame implements ActionListener {
     
     private JFileChooser fileChooser;
     private directoryClass dir = directoryClass.getInstance();
     
     /** Creates new form mainFrame */
-    public mainFrame() {
+    public electionFrame() {
+        super();
         // Setting location for main form to be displayed at:
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/4, dim.height/4);
@@ -59,6 +62,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         encriptionPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         encSrcDir = new javax.swing.JTextField();
@@ -69,7 +75,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         encCheckBox = new javax.swing.JCheckBox();
         encBtn = new javax.swing.JButton();
         numberOfWordsPerGroupTextField = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        wordsPerGroupLabel = new javax.swing.JLabel();
         decriptionPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         decSrcDir = new javax.swing.JTextField();
@@ -83,6 +89,11 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Njamb's Cryptography");
         setResizable(false);
+
+        jLabel7.setText("Election 1876 Cipher");
+        jPanel1.add(jLabel7);
+
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
 
         encriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Encryption"));
         encriptionPanel.setName(""); // NOI18N
@@ -122,7 +133,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        jLabel6.setText("# of words per group:");
+        wordsPerGroupLabel.setText("# of words per group:");
 
         javax.swing.GroupLayout encriptionPanelLayout = new javax.swing.GroupLayout(encriptionPanel);
         encriptionPanel.setLayout(encriptionPanelLayout);
@@ -151,9 +162,9 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                         .addGap(18, 18, 18)
                         .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(encriptionPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
+                                .addComponent(wordsPerGroupLabel)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(numberOfWordsPerGroupTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))))
+                            .addComponent(numberOfWordsPerGroupTextField))))
                 .addContainerGap())
         );
         encriptionPanelLayout.setVerticalGroup(
@@ -172,7 +183,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(encDstDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(encDstBtn))
                 .addGap(1, 1, 1)
-                .addComponent(jLabel6)
+                .addComponent(wordsPerGroupLabel)
                 .addGap(1, 1, 1)
                 .addGroup(encriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(encBtn)
@@ -180,6 +191,10 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(numberOfWordsPerGroupTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        jPanel2.add(encriptionPanel);
+        encriptionPanel.getAccessibleContext().setAccessibleName("");
+        encriptionPanel.getAccessibleContext().setAccessibleDescription("");
 
         decriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Decryption"));
 
@@ -204,8 +219,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
         decriptionPanel.setLayout(decriptionPanelLayout);
         decriptionPanelLayout.setHorizontalGroup(
             decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(decriptionPanelLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, decriptionPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
@@ -219,7 +234,7 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                         .addGroup(decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(decSrcBtn)
                             .addComponent(decDstBtn))))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap())
         );
         decriptionPanelLayout.setVerticalGroup(
             decriptionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,29 +258,28 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                 .addContainerGap())
         );
 
+        jPanel2.add(decriptionPanel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(decriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(encriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(encriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(decriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        encriptionPanel.getAccessibleContext().setAccessibleName("");
-        encriptionPanel.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -393,24 +407,25 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(mainFrame.class.getName()).
+            java.util.logging.Logger.getLogger(electionFrame.class.getName()).
                     log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(mainFrame.class.getName()).
+            java.util.logging.Logger.getLogger(electionFrame.class.getName()).
                     log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(mainFrame.class.getName()).
+            java.util.logging.Logger.getLogger(electionFrame.class.getName()).
                     log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(mainFrame.class.getName()).
+            java.util.logging.Logger.getLogger(electionFrame.class.getName()).
                     log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new mainFrame().setVisible(true);
+                new electionFrame().setVisible(true);
             }
         });
     }
@@ -434,8 +449,11 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField numberOfWordsPerGroupTextField;
+    private javax.swing.JLabel wordsPerGroupLabel;
     // End of variables declaration//GEN-END:variables
     
     @Override
@@ -451,7 +469,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
 
                     
                     if (!numberOfWordsPerGroupTextField.getText().isEmpty()) {
-                        int number = Integer.parseInt(numberOfWordsPerGroupTextField.getText());
+                        int number = Integer.parseInt(
+                                numberOfWordsPerGroupTextField.getText());
                         dir.setWordsPerGroup(number);
                     }
                     
@@ -465,8 +484,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     }
                     else {
                         JOptionPane.showMessageDialog(null, "Please choose "
-                                + "encription source & destination folders before "
-                                + "retrying to encript files.",
+                                + "encription source & destination folders "
+                                + "before retrying to encript files.",
                                 "Folders not specified", 
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -482,8 +501,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     }
                     else {
                         JOptionPane.showMessageDialog(null, "Please choose "
-                                + "decription source & destination folders before "
-                                + "retrying to encript files.",
+                                + "decription source & destination folders "
+                                + "before retrying to encript files.",
                                 "Folders not specified",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -494,7 +513,6 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     "You're trying to enter a NON-NUMERAL value. "
                         + "Please try again using a number.", 
                     "You've done goofed!", JOptionPane.INFORMATION_MESSAGE);
-               // numberOfWordsPerGroupTextField.setText("# of words per group");
             }
         }
         else {
@@ -561,7 +579,8 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
     public void clickEncBtn() {
         try {
             if (!numberOfWordsPerGroupTextField.getText().isEmpty()) {
-                        int number = Integer.parseInt(numberOfWordsPerGroupTextField.getText());
+                        int number = Integer.parseInt(
+                                numberOfWordsPerGroupTextField.getText());
                         dir.setWordsPerGroup(number);
             }
             
@@ -579,7 +598,6 @@ public class mainFrame extends javax.swing.JFrame implements ActionListener {
                     "You're trying to enter a NON-NUMERAL value. "
                         + "Please try again using a number.", 
                     "You've done goofed!", JOptionPane.INFORMATION_MESSAGE);
-               // numberOfWordsPerGroupTextField.setText("# of words per group");
             }
     }
     

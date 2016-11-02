@@ -11,17 +11,19 @@ package kriptoalgoritmi;
  */
 public class a5_1Cryption {
     private String key;
-    private byte oneByte;
+    private int oneByte;
     private int[] smallReg = new int[19]; // 0-18
     private int[] midReg = new int[22]; // 0-21
     private int[] bigReg = new int[23]; // 0-22
     private int majorityVote;
+    private int bitCounter;
     
     public a5_1Cryption(String key) {
         this.key = key;
       
         clearRegs();
         fillRegsWithKey();
+        bitCounter = 0;
     }
     
 //    // Setter for a sequence of numbers given as a string:
@@ -63,36 +65,15 @@ public class a5_1Cryption {
         }
     }
     
-    // Method for checking which registers are going to be shifted.
-    // Method returns XOR'ed value of top bits of each register (which are being
-    // pushed to carry:
+    // Method for checking which registers are going to be shifted, and shifts 
+    // them.
+    // Method returns XOR'ed value of bottom bits of each register 
+    // (which might get pushed to carry):
     private int majorityVote() {
-        int zeros = 0;
-        int ones = 0;
-        
-        if (smallReg[8] == 0)
-            zeros++;
-        else
-            ones++;
-        
-        if (midReg[10] == 0)
-            zeros++;
-        else
-            ones++;
-        
-        if (bigReg[10] == 0)
-            zeros++;
-        else
-            ones++;
-        
-        if (zeros > ones) {
-            majorityVote = 0;
+        if (getMajorityVote() == 0)
             return shiftRegs(0);
-        }
-        else {
-            majorityVote = 1;
+        else 
             return shiftRegs(1);
-        }
     }
 
     // Method for checking if majority in significant bits of register are 0/1.
@@ -167,7 +148,7 @@ public class a5_1Cryption {
     }
     
     // Method for setting the working byte - 'oneByte':
-    public void setByte(byte block) {
+    public void setByte(int block) {
         oneByte = block;
     }
     
@@ -176,12 +157,30 @@ public class a5_1Cryption {
         byte xorByte = (byte) 0x80;
         
         for (int i = 0; i < 8; i++) {
-            if (majorityVote() == 1) {
+            int major = majorityVote();
+            if (major == 1) {
                 oneByte ^= xorByte;
             }
             xorByte >>>= 1;
         }
+        return 1;
+        //return oneByte;
+    }
+    
+    // Method for encrypting only one bit:
+    public int encryptByBits() {
+       // byte xorByte = (byte) 0x80;
+        int xorByte = 0x80;
         
+        if (bitCounter == 8)
+            bitCounter = 0;
+        
+        if (majorityVote() == 1) {
+            xorByte >>= bitCounter;
+            oneByte ^= xorByte;
+        }
+        
+        bitCounter++;
         return oneByte;
     }
     
@@ -201,6 +200,29 @@ public class a5_1Cryption {
     }
     
     public int getMajorityVote() {
+        int zeros = 0;
+        int ones = 0;
+        
+        if (smallReg[8] == 0)
+            zeros++;
+        else
+            ones++;
+        
+        if (midReg[10] == 0)
+            zeros++;
+        else
+            ones++;
+        
+        if (bigReg[10] == 0)
+            zeros++;
+        else
+            ones++;
+        
+        if (zeros > ones) 
+            majorityVote = 0;
+        else
+            majorityVote = 1;
+     
         return majorityVote;
     }
 }

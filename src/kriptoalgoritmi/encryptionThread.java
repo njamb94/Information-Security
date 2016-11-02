@@ -20,19 +20,19 @@ import java.util.logging.Logger;
 public class encryptionThread implements Runnable{
     
     // Placeholder for the names of the .txt/.nj files:
-    private String[] filesInFolder;
+    private final String[] filesInFolder;
     // Placeholders for source & destination paths for encryption & decryption:
-    private String encSrcFolder;
-    private String encDstFolder;
-    private String decSrcFolder;
-    private String decDstFolder;
+    private final String encSrcFolder;
+    private final String encDstFolder;
+    private final String decSrcFolder;
+    private final String decDstFolder;
     
     // Index of the file in 'filesInFolder' being encrypted/decrypted:
-    private int index;
+    private final int index;
     // Flag for determinating if it's encryption/decryption (true/false):
-    private boolean isEncryption;
+    private final boolean isEncryption;
     
-    private int wordsPerGroup;
+    private final int wordsPerGroup;
     
     private directoryClass d;
     // Thread constructor that sets above mentioned placeholders:
