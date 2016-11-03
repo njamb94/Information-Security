@@ -51,18 +51,17 @@ public class a5_1Cryption {
     // Method for filling shifting registers with the key value:
     private void fillRegsWithKey() {
         int counter = 0;
-        if (key != null) {
-            for (int i = 0; i < 19; i++, counter++) {
-                smallReg[i] = Integer.parseInt(String.valueOf(key.charAt(counter)));
-            }
-
-            for (int i = 0; i < 22; i++, counter++) {
-                midReg[i] = Integer.parseInt(String.valueOf(key.charAt(counter)));
-            }
-
-            for (int i = 0; i < 23; i++, counter++) {
-                bigReg[i] = Integer.parseInt(String.valueOf(key.charAt(counter)));
-            }
+        
+        for (int i = 0; i < 19; i++, counter++) {
+            smallReg[i] = Integer.parseInt(String.valueOf(key.charAt(counter)));
+        }
+        
+        for (int i = 0; i < 22; i++, counter++) {
+            midReg[i] = Integer.parseInt(String.valueOf(key.charAt(counter)));
+        }
+        
+        for (int i = 0; i < 23; i++, counter++) {
+            bigReg[i] = Integer.parseInt(String.valueOf(key.charAt(counter)));
         }
     }
     
@@ -148,30 +147,24 @@ public class a5_1Cryption {
         return bigReg;
     }
     
-    // Method for setting the working int byte - 'oneByte':
-    public void setIntByte(int block) {
-        oneByte = block;
-    }
-    
-    // Method for setting the working int byte - 'oneByte':
-    public void setByte(byte block) {
+    // Method for setting the working byte - 'oneByte':
+    public void setByte(int block) {
         oneByte = block;
     }
     
     // Method for encryption using A5/1 algorithm:
     public byte encrypt() {
-        //byte xorByte = (byte) 0x80;
-        int xorByte = 0x80;
+        byte xorByte = (byte) 0x80;
         
         for (int i = 0; i < 8; i++) {
             int major = majorityVote();
             if (major == 1) {
                 oneByte ^= xorByte;
             }
-            xorByte >>= 1;
+            xorByte >>>= 1;
         }
-        
-        return (byte) oneByte;
+        return 1;
+        //return oneByte;
     }
     
     // Method for encrypting only one bit:
@@ -192,9 +185,8 @@ public class a5_1Cryption {
     }
     
     // Method for decryption using A5/1 algorithm:
-    public int decrypt() {
-        return encryptByBits();
-        //return encrypt();
+    public byte decrypt() {
+        return encrypt();
     }
     
     // Getter for key:
@@ -205,10 +197,8 @@ public class a5_1Cryption {
     // Setter for key:
     public void setKey(String key) {
         this.key = key;
-        fillRegsWithKey();
     }
     
-    // Method for calculating and returning majority vote:
     public int getMajorityVote() {
         int zeros = 0;
         int ones = 0;

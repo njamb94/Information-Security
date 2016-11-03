@@ -31,9 +31,8 @@ public class directoryClass implements Runnable{
     // Placeholders for source & destination paths for decryption
     private String decSrcTextField;
     private String decDstTextField;
-    // Reference holders for the calling window:
+    // Reference holder for the main window:
     private electionFrame ptr;
-    private A5_1Frame a51ptr;
     
     // Container for files in encryption/decryption source folder:
     private File[] listOfFiles;
@@ -46,9 +45,6 @@ public class directoryClass implements Runnable{
     private boolean encDec;
     private int wordsPerGroup;
     private WatchService watcher;
-    
-    // Key placeholder for A5/1 algorithm:
-    private String key;
     
     private directoryClass() {
         encSrcTextField = "";
@@ -80,38 +76,20 @@ public class directoryClass implements Runnable{
     // Method to be called when thread of this class starts:
     @Override
     public void run() {
-        if (ptr != null) {
-            // If the checkbox is checked and encryption is in mind:
-            if (ptr.isChecked() && encDec) {
-                // Encrypt files:
-                encryptFiles();
-                // Activate folder watcher for automated encryption:
-                folderWatcher();
-            }
-            // Else check if it's only encryption/decryption
-            else if (encDec)
-                // Encrypt files:
-                    encryptFiles();
-                else
-                // Decrypt files:
-                    decryptFiles();
+        // If the checkbox is checked and encryption is in mind:
+        if (ptr.isChecked() && encDec) {
+            // Encrypt files:
+            encryptFiles();
+            // Activate folder watcher for automated encryption:
+            folderWatcher();
         }
-        else if (a51ptr != null) {
-            // If the checkbox is checked and encryption is in mind:
-            if (a51ptr.isChecked() && encDec) {
-                // Encrypt files:
+        // Else check if it's only encryption/decryption
+        else if (encDec)
+            // Encrypt files:
                 encryptFiles();
-                // Activate folder watcher for automated encryption:
-                folderWatcher();
-            }
-            // Else check if it's only encryption/decryption
-            else if (encDec)
-                // Encrypt files:
-                    encryptFiles();
-                else
-                // Decrypt files:
-                    decryptFiles();
-        }
+            else
+            // Decrypt files:
+                decryptFiles();
     }
     
     // Method for automated encryption:
@@ -138,11 +116,8 @@ public class directoryClass implements Runnable{
                         // If another file is created in the watched folder and
                         // no one pressed decryption:
                         if (kind == ENTRY_CREATE && encDec) {
-                            if (ptr != null)
-                                // Call encrypt button's method:
-                                ptr.clickEncBtn();
-                            else if (a51ptr != null)
-                                a51ptr.clickEncBtn();
+                            // Call encrypt button's method:
+                            ptr.clickEncBtn();
                         }
                     }
                     
@@ -221,57 +196,21 @@ public class directoryClass implements Runnable{
         }
     }
     
-    public void readAllFromDirectory(String path, boolean isEncryption) {
-        encDec = isEncryption;
-        
-        // Open the specified folder and get it's content:
-        File folder = new File(path);
-        listOfFiles = folder.listFiles();
-        
-        filesInFolder = new String[listOfFiles.length];
-        
-        // Extract String formated files' names from our list:
-        for (int i = 0; i < filesInFolder.length; i++)
-            filesInFolder[i] = listOfFiles[i].getName();
-        
-        numberOfTxtFiles = filesInFolder.length;
-    }
-    
-    // Method for setting the reference of the election calling form:
-    public void setElectionListener(electionFrame frm) {
+    // Method for setting the reference of the main window:
+    public void setListener(electionFrame frm) {
         ptr = frm;
-    }
-    
-    // Method for setting the reference of the A5/1 calling form:
-    public void setA5_1Listener(A5_1Frame frm) {
-        a51ptr = frm;
-    }
-    
-    // Method for clearing references to directoryClass:
-    public void clearListeners() {
-        ptr = null;
-        a51ptr = null;
     }
     
     // Method that goes through .txt files, encrypts them, and writes them
     // at the encryption destination folder.
     public void encryptFiles() {
         
-        if (ptr != null) {
-            // Block (read disable) GUI so the user doesn't do something bad:
-            ptr.blockGUI(true);
-            // Set the text on the encryption button so the user knows that
-            // something is going in the background (feedback):
-            ptr.setEncBtnLabel("Encrypting...");
-        }
-        else if (a51ptr != null) {
-            // Block (read disable) GUI so the user doesn't do something bad:
-            a51ptr.blockGUI(true);
-            // Set the text on the encryption button so the user knows that
-            // something is going in the background (feedback):
-            a51ptr.setEncBtnLabel("Encrypting...");
-        }
-        Thread t = null;
+        // Block (read disable) GUI so the user doesn't do something bad:
+        ptr.blockGUI(true);
+        // Set the text on the encryption button so the user knows that
+        // something is going in the background (feedback):
+        ptr.setEncBtnLabel("Encrypting...");
+        Thread t;
         
         // For every .txt file:
         for (int k = 0; k < numberOfTxtFiles; k++) {
@@ -290,49 +229,27 @@ public class directoryClass implements Runnable{
                     }
                 }
             }
-            if (ptr != null)
-                // Create our election encryption thread:
-                t = new Thread (new encryptionThread(this, k, true));
-            else
-                // Create our a5/1 encryption thread:
-                if (a51ptr != null)
-                    t = new Thread (new a5_1Thread(this, k, encDec, key));
+            // Create our encryption thread:
+            t = new Thread (new encryptionThread(this, k, true));
             // Let it do it's encryption:
             t.start();
         }
         
-        if (ptr != null) {
-            // After they all finish, unblock (enable) GUI for further use:
-            ptr.blockGUI(false);
-            // Change the text on the encryption button back:
-            ptr.setEncBtnLabel("Encrypt");
-        }
-        else if (a51ptr != null) {
-            // After they all finish, unblock (enable) GUI for further use:
-            a51ptr.blockGUI(false);
-            // Change the text on the encryption button back:
-            a51ptr.setEncBtnLabel("Encrypt");
-        }
+        // After they all finish, unblock (enable) GUI for further use:
+        ptr.blockGUI(false);
+        // Change the text on the encryption button back:
+        ptr.setEncBtnLabel("Encrypt");
     }
     
     // Method that goes through .nj files, decrypts them, and writes them
     // at the decryption destination folder.
     public void decryptFiles() {
-        if (ptr != null) {
-            // Block (read disable) GUI so the user doesn't do something bad:
-            ptr.blockGUI(true);
-            // Set the text on the decryption button so the user knows that
-            // something is going in the background (feedback):
-            ptr.setDecBtnLabel("Decrypting...");
-        }
-        else if (a51ptr != null) {
-            // Block (read disable) GUI so the user doesn't do something bad:
-            a51ptr.blockGUI(true);
-            // Set the text on the decryption button so the user knows that
-            // something is going in the background (feedback):
-            a51ptr.setDecBtnLabel("Decrypting...");
-        }
-        Thread t = null;
+        // Block (read disable) GUI so the user doesn't do something bad:
+        ptr.blockGUI(true);
+        // Set the text on the decryption button so the user knows that
+        // something is going in the background (feedback):
+        ptr.setDecBtnLabel("Decrypting...");
+        Thread t;
         
         // For every .nj file:
         for (int k = 0; k < numberOfTxtFiles; k++) {
@@ -351,29 +268,16 @@ public class directoryClass implements Runnable{
                     }
                 }
             }
-            if (ptr != null)
-                // Create our election decryption thread:
-                t = new Thread (new encryptionThread(this, k, false));
-            else
-                // Create our a5/1 decryption thread:
-                if (a51ptr != null)
-                    t = new Thread (new a5_1Thread(this, k, encDec, key));
+            // Create our decryption thread:
+            t = new Thread (new encryptionThread(this, k, false));
             // Let it do it's decryption:
             t.start();
         }
         
-        if (ptr != null) {
-            // After they all finish, unblock (enable) GUI for further use:
-            ptr.blockGUI(false);
-            // Change the text on the decryption button back:
-            ptr.setDecBtnLabel("Decrypt");
-        }
-        else if (a51ptr != null) {
-            // After they all finish, unblock (enable) GUI for further use:
-            a51ptr.blockGUI(false);
-            // Change the text on the decryption button back:
-            a51ptr.setDecBtnLabel("Decrypt");
-        }
+        // After they all finish, unblock (enable) GUI for further use:
+        ptr.blockGUI(false);
+        // Change the text on the decryption button back:
+        ptr.setDecBtnLabel("Decrypt");
     }
     
     // Getter for the container for the .txt/.nj files in folder:
@@ -431,15 +335,5 @@ public class directoryClass implements Runnable{
     // Setter for user's choice of words per group for encryption:
     public void setWordsPerGroup(int number) {
         wordsPerGroup = number;
-    }
-    
-    // Key setter method:
-    public void setKey(String parseKey) {
-        key = parseKey;
-    }
-    
-    // Key getter method:
-    public String getKey() {
-        return key;
     }
 }

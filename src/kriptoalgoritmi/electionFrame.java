@@ -49,11 +49,8 @@ public class electionFrame extends javax.swing.JFrame implements ActionListener 
             }
         });
         
-        checkButtons();     
-        dir.clearListeners();
-        dir.setElectionListener(this);
-        
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        checkButtons();        
+        dir.setListener(this);
     }
 
     /** This method is called from within the constructor to

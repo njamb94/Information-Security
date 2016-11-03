@@ -27,20 +27,17 @@ public class a5_1Thread implements Runnable{
     private final boolean isEncryption;
     private final directoryClass dir;
     private String key;
-    private a5_1Cryption cryptObj;
     
     public a5_1Thread(directoryClass dir, int index, boolean bool, String key) {
         this.dir = dir;
         fileIndex = index;
         isEncryption = bool;
         this.key = key;
-        
-        cryptObj = new a5_1Cryption(key);
     }
     
     @Override
     public void run() {
-        
+        a5_1Cryption cryptObj = new a5_1Cryption(key);
         
         try {
             FileInputStream fileInput = null;
@@ -80,10 +77,9 @@ public class a5_1Thread implements Runnable{
                     // First we write key length (should be 64 always):
                     dataOutput.writeInt(key.length());
                     // Then we write the key itself:
-                    dataOutput.writeChars(key);
-//                    for (int i = 0; i < key.length(); i++) {
-//                        dataOutput.writeChar(key.charAt(i));
-//                    }
+                    for (int i = 0; i < key.length(); i++) {
+                        dataOutput.writeChar(key.charAt(i));
+                    }
                     
                     // After that, we write the number of chars needed to 
                     // remember the extension:
@@ -97,8 +93,7 @@ public class a5_1Thread implements Runnable{
                     while (dataInput.available() > 0) {
                         readByte = dataInput.readByte();
                         cryptObj.setByte(readByte);
-                        for (int i = 0; i < 8; i++)
-                            readByte = (byte) cryptObj.encryptByBits();
+                        readByte = cryptObj.encrypt();
 
                         dataOutput.writeByte(readByte);
                     }
@@ -136,37 +131,43 @@ public class a5_1Thread implements Runnable{
                     // First we read the keyLength used for encryption:
                     int keyLength = dataInput.readInt();
                     // Then we make placeholder for our key:
-                    String readKey = "";
+                    char[] readKey = new char[keyLength];
                     // Read and store the key value:
                     for (int i = 0; i < keyLength; i++) {
-                        readKey = readKey.concat(String.valueOf(
-                                dataInput.readChar()));
+                        readKey[i] = dataInput.readChar();
+                    }
+                    // Necessary conversion from char[] to String:
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(readKey);
+                    key = builder.toString();
+                    
+                    // First we write key length (should be 64 always):
+                    dataOutput.writeInt(key.length());
+                    // Then we write the key itself:
+                    for (int i = 0; i < key.length(); i++) {
+                        dataOutput.writeChar(key.charAt(i));
                     }
                     
-                    ///////////////////////////////////////////////////////////////////////////////////////
-                    cryptObj.setKey(key);
-                    
-                    int extSize = dataInput.readInt();
-                    String extensionStr = "";
-                    for (int i = 0; i < extSize; i++) {
-                        extensionStr = extensionStr.concat(String.valueOf(
-                                dataInput.readChar()));
-                    }
+                    // First we read the number of chars for written extension:
+                    int numberOfChars = dataInput.readInt();
+                    // Create extension placeholder and read it from file.
+                    // (Extension with it's prefix dot):
+                    char[] extension = new char[numberOfChars];
+                    for (int i = 0; i < numberOfChars; i++)
+                        extension[i] = dataInput.readChar();
 
-                    
                     // Open output file:
                     fileOutput = new FileOutputStream(dir.getDecDst() + "/" +
-                            fileName + String.valueOf(extensionStr));
+                            fileName + String.valueOf(extension));
                     buffOutput = new BufferedOutputStream(fileOutput);
                     dataOutput = new DataOutputStream(buffOutput);
 
                     // Read byte by byte, decrypt it, and write it at destination:
                     byte readByte;
-                    while (dataInput.available() > 0) {
+                    while (fileInput.available() > 0) {
                         readByte = dataInput.readByte();
                         cryptObj.setByte(readByte);
-                        for (int i = 0; i < 8; i++)
-                            readByte = (byte) cryptObj.decrypt();
+                        readByte = cryptObj.decrypt();
 
                         dataOutput.writeByte(readByte);
                     }
