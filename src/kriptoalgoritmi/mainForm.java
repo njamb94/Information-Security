@@ -5,6 +5,9 @@
  */
 package kriptoalgoritmi;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 /**
  *
  * @author Njamb
@@ -15,6 +18,9 @@ public class mainForm extends javax.swing.JFrame {
      * Creates new form mainForm
      */
     public mainForm() {
+        // Setting location for main form to be displayed at:
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/4, dim.height/4);
         initComponents();
     }
 
@@ -35,9 +41,9 @@ public class mainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel1.setText("Select encryption method:");
+        jLabel1.setText("Select encryption method");
 
-        cryptionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Election 1876 Cipher", "A5/1" }));
+        cryptionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Election 1876 Cipher", "A5/1", "A5/1 Simulation" }));
 
         startBtn.setText("Start");
         startBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -90,15 +96,22 @@ public class mainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
-        if (cryptionComboBox.getSelectedItem().toString().equals("Election 1876 Cipher")) {
+        if (cryptionComboBox.getSelectedItem().toString()
+                .equals("Election 1876 Cipher")) {
             electionFrame electionFrm = new electionFrame();
             electionFrm.setVisible(true);
         } 
         else 
             if (cryptionComboBox.getSelectedItem().toString().equals("A5/1")) {
-                A5_1SimulationFrame a5_1Frm = new A5_1SimulationFrame();
+                A5_1Frame a5_1Frm = new A5_1Frame();
                 a5_1Frm.setVisible(true);
             }
+            else
+                if (cryptionComboBox.getSelectedItem().toString()
+                        .equals("A5/1 Simulation")) {
+                    A5_1SimulationFrame a5_1Frm = new A5_1SimulationFrame();
+                    a5_1Frm.setVisible(true);
+                }
     }//GEN-LAST:event_startBtnActionPerformed
 
     /**
