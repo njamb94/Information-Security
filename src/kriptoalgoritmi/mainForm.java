@@ -37,7 +37,7 @@ public class mainForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("Select encryption method:");
 
-        cryptionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Election 1876 Cipher", "A5/1" }));
+        cryptionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Election 1876 Cipher", "A5/1", "A5/1 Simulation" }));
 
         startBtn.setText("Start");
         startBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -96,8 +96,13 @@ public class mainForm extends javax.swing.JFrame {
         } 
         else 
             if (cryptionComboBox.getSelectedItem().toString().equals("A5/1")) {
-                A5_1SimulationFrame a5_1Frm = new A5_1SimulationFrame();
-                a5_1Frm.setVisible(true);
+                A5_1Frame a5_1frm = new A5_1Frame();
+                a5_1frm.setVisible(true);
+            }
+            else if (cryptionComboBox.getSelectedItem().toString()
+                    .equals("A5/1 Simulation")) {
+                A5_1SimulationFrame a5_1SimFrm = new A5_1SimulationFrame();
+                a5_1SimFrm.setVisible(true);
             }
     }//GEN-LAST:event_startBtnActionPerformed
 

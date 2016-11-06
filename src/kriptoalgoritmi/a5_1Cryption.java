@@ -186,7 +186,7 @@ public class a5_1Cryption {
     
     // Method for decryption using A5/1 algorithm:
     public byte decrypt() {
-        return encrypt();
+        return (byte) encryptByBits();
     }
     
     // Getter for key:

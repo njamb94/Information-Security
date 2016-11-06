@@ -27,6 +27,7 @@ public class a5_1Thread implements Runnable{
     private final boolean isEncryption;
     private final directoryClass dir;
     private String key;
+    private a5_1Cryption cryptObj;
     
     public a5_1Thread(directoryClass dir, int index, boolean bool, String key) {
         this.dir = dir;
@@ -37,7 +38,8 @@ public class a5_1Thread implements Runnable{
     
     @Override
     public void run() {
-        a5_1Cryption cryptObj = new a5_1Cryption(key);
+        if (key != null)
+            cryptObj = new a5_1Cryption(key);
         
         try {
             FileInputStream fileInput = null;
@@ -77,9 +79,8 @@ public class a5_1Thread implements Runnable{
                     // First we write key length (should be 64 always):
                     dataOutput.writeInt(key.length());
                     // Then we write the key itself:
-                    for (int i = 0; i < key.length(); i++) {
-                        dataOutput.writeChar(key.charAt(i));
-                    }
+                    dataOutput.writeChars(key);
+                    
                     
                     // After that, we write the number of chars needed to 
                     // remember the extension:
@@ -93,7 +94,8 @@ public class a5_1Thread implements Runnable{
                     while (dataInput.available() > 0) {
                         readByte = dataInput.readByte();
                         cryptObj.setByte(readByte);
-                        readByte = cryptObj.encrypt();
+                        for (int i = 0; i < 8; i++)
+                            readByte = (byte) cryptObj.encryptByBits();
 
                         dataOutput.writeByte(readByte);
                     }
@@ -114,73 +116,67 @@ public class a5_1Thread implements Runnable{
                 // It will skip decryption if the file exists in the destination
                 // folder in it's original 
                 if (!dir.getFilesInFolder()[fileIndex].isEmpty()) {
+                    if (dir.getFilesInFolder()[fileIndex].contains(".a51")) {
+                        // Open input file:
+                        fileInput = new FileInputStream(dir.getDecSrc() + "/" + 
+                                dir.getFilesInFolder()[fileIndex]);
+                        buffInput = new BufferedInputStream(fileInput);
+                        dataInput = new DataInputStream(buffInput);
 
-                    // Open input file:
-                    fileInput = new FileInputStream(dir.getDecSrc() + "/" + 
-                            dir.getFilesInFolder()[fileIndex]);
-                    buffInput = new BufferedInputStream(fileInput);
-                    dataInput = new DataInputStream(buffInput);
+                        // We extract the fileName from the array of Strings:
+                        String fileName = dir.getFilesInFolder()[fileIndex];
+                        // Get the index of extension prefix '.':
+                        int index = fileName.indexOf(".");
+                        // Get the fileName without extension:
+                        fileName = fileName.substring(0, index);
 
-                    // We extract the fileName from the array of Strings:
-                    String fileName = dir.getFilesInFolder()[fileIndex];
-                    // Get the index of extension prefix '.':
-                    int index = fileName.indexOf(".");
-                    // Get the fileName without extension:
-                    fileName = fileName.substring(0, index);
+                        // First we read the keyLength used for encryption:
+                        int keyLength = dataInput.readInt();
+                        // Then we make placeholder for our key:
+                        key = "";
+                        // Read and store the key value:
+                        for (int i = 0; i < keyLength; i++) {
+                            key = key.concat(String.valueOf(
+                                    dataInput.readChar()));
+                        }
 
-                    // First we read the keyLength used for encryption:
-                    int keyLength = dataInput.readInt();
-                    // Then we make placeholder for our key:
-                    char[] readKey = new char[keyLength];
-                    // Read and store the key value:
-                    for (int i = 0; i < keyLength; i++) {
-                        readKey[i] = dataInput.readChar();
+                        cryptObj = new a5_1Cryption(key);
+
+                        // First we read the number of chars for written extension:
+                        int numberOfChars = dataInput.readInt();
+                        // Create extension placeholder and read it from file.
+                        // (Extension with it's prefix dot):
+                        char[] extension = new char[numberOfChars];
+                        for (int i = 0; i < numberOfChars; i++)
+                            extension[i] = dataInput.readChar();
+
+                        // Open output file:
+                        fileOutput = new FileOutputStream(dir.getDecDst() + "/" +
+                                fileName + String.valueOf(extension));
+                        buffOutput = new BufferedOutputStream(fileOutput);
+                        dataOutput = new DataOutputStream(buffOutput);
+
+                        // Read byte by byte, decrypt it, and write it at destination:
+                        byte readByte;
+                        while (dataInput.available() > 0) {
+                            readByte = dataInput.readByte();
+                            cryptObj.setByte(readByte);
+                            for (int i = 0; i < 8; i++)
+                                readByte = cryptObj.decrypt();
+
+                            dataOutput.writeByte(readByte);
+                        }
+
+                        // Close output:
+                        dataOutput.close();
+                        buffOutput.close();
+                        fileOutput.close();
+
+                        // Close input:
+                        dataInput.close();
+                        buffInput.close();
+                        fileInput.close();
                     }
-                    // Necessary conversion from char[] to String:
-                    StringBuilder builder = new StringBuilder();
-                    builder.append(readKey);
-                    key = builder.toString();
-                    
-                    // First we write key length (should be 64 always):
-                    dataOutput.writeInt(key.length());
-                    // Then we write the key itself:
-                    for (int i = 0; i < key.length(); i++) {
-                        dataOutput.writeChar(key.charAt(i));
-                    }
-                    
-                    // First we read the number of chars for written extension:
-                    int numberOfChars = dataInput.readInt();
-                    // Create extension placeholder and read it from file.
-                    // (Extension with it's prefix dot):
-                    char[] extension = new char[numberOfChars];
-                    for (int i = 0; i < numberOfChars; i++)
-                        extension[i] = dataInput.readChar();
-
-                    // Open output file:
-                    fileOutput = new FileOutputStream(dir.getDecDst() + "/" +
-                            fileName + String.valueOf(extension));
-                    buffOutput = new BufferedOutputStream(fileOutput);
-                    dataOutput = new DataOutputStream(buffOutput);
-
-                    // Read byte by byte, decrypt it, and write it at destination:
-                    byte readByte;
-                    while (fileInput.available() > 0) {
-                        readByte = dataInput.readByte();
-                        cryptObj.setByte(readByte);
-                        readByte = cryptObj.decrypt();
-
-                        dataOutput.writeByte(readByte);
-                    }
-
-                    // Close output:
-                    dataOutput.close();
-                    buffOutput.close();
-                    fileOutput.close();
-
-                    // Close input:
-                    dataInput.close();
-                    buffInput.close();
-                    fileInput.close();
                 }
             }
         } 
